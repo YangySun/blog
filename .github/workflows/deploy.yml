@@ -47,4 +47,4 @@ jobs:
           git add -A
           git commit -m "Create by workflows"
           git remote add origin https://${{ secrets.GH_TOKEN }}@github.com/YangySun/blog.git
-          git push origin HEAD:public -f
+          git push origin HEAD:gh-pages -f
