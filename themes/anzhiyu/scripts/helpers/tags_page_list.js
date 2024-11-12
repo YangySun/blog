@@ -13,9 +13,11 @@ hexo.extend.helper.register('tags_page_list', function (type) {
   }, []);
 
   let html = ``;
+  const root = hexo.config.root; // 获取站点根目录
+
   sortedTags.forEach(function (item) {
     html += `
-      <a href="/${item.path}" id="/${item.path}">
+      <a href="${root}${item.path}" id="${root}${item.path}">
         <span class="tags-punctuation">#</span>${item.name}
         <span class="tagsPageCount">${item.length}</span>
       </a>
