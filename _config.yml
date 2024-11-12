@@ -1,9 +1,9 @@
-title: Hexo
-subtitle: ''
-description: ''
-keywords: null
-author: John Doe
-language: en
+title: 卖泡泡糖的杂货铺
+subtitle: '看就完了'
+description: '敬请期待'
+keywords: 时空
+author: 泡泡糖
+language: zh-CN
 timezone: ''
 url: https://yangysun.github.io/blog
 root: /blog/
@@ -34,14 +34,14 @@ relative_link: false
 future: true
 syntax_highlighter: highlight.js
 highlight:
-  line_number: true
+  line_number: false
   auto_detect: false
   tab_replace: ''
   wrap: true
   hljs: false
 prismjs:
   preprocess: true
-  line_number: true
+  line_number: false
   tab_replace: ''
 index_generator:
   path: ''
