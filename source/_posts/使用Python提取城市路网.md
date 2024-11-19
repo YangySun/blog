@@ -17,7 +17,7 @@ Start Lab-孙杨洋 时空实验室 2024-05-09 重庆
 Python下载：https://www.python.org/ （确保安装pip，如果希望环境分离可以安装conda：https://www.anaconda.com/download ）\
 Pycharm下载：https://www.jetbrains.com/zh-cn/pycharm/ (建议安装jupter插件进行交互式编写)
 #### 1.1.2 必要的Python包的安装
-```
+```python
 pip install osmnx geopandas pandas numpy shapely
 ```
 - **osmnx** 是一个基于 OpenStreetMap 数据的 Python 库，用于从 OpenStreetMap 获取、构建、分析和可视化街道网络和其他地理空间数据。通过 osmnx，我们可以轻松地检索全球范围内的街道网络数据，并进行各种空间分析，如路网分析、路径规划和空间可视化。
@@ -28,7 +28,7 @@ pip install osmnx geopandas pandas numpy shapely
 - **math** 是 Python 标准库中的一个模块，提供了许多数学函数和常量。
 
 #### 1.1.3 导入Python包
-```
+```python
 import osmnx as ox
 import geopandas as gpd
 import pandas as pd
@@ -40,13 +40,13 @@ import math
 ```
 ### 1.2 路网的提取
 #### 1.2.1 根据城市名称获取路网
-```
+```python
 place_name = "Chendu, China"
 graph = ox.graph_from_place(place_name, network_type='drive')
 ```
 place_name指定城市位置（格式为城市，国家），graph是根据位置获得的路网图，类型为多图。
 #### 1.2.2 根据经纬度边界获取路网
-```
+```python
 north, south, east, west = 30.67, 30.65, 104.07, 104.05
 graph = ox.graph_from_bbox(north, south, east, west, network_type='drive')
 ```
@@ -55,7 +55,7 @@ north, south, east, west指定经纬度的边界（四个参数亦可以使用bb
 其他获取路网的方式请参考：https://github.com/gboeing/osmnx
 ### 1.3 路网的处理
 #### 1.3.1 提取节点与边
-```
+```python
 gdf_nodes, gdf_edges = ox.graph_to_gdfs(graph)
 ```
 gdf_nodes是点的集合，gdf_edges是边的集合，它们的类型都是GeoDataFrame，包含字段见下表：
@@ -97,13 +97,13 @@ gdf_nodes是点的集合，gdf_edges是边的集合，它们的类型都是GeoDa
 为提取路网，我们需要使用到gdf_edges中的u,v获取路段的起点与终点，通过oneway字段与reversed确定路段方向,通过length获取路段长度。
 
 #### 1.3.2 取消索引并生成唯一id
-```
+```python
 gdf_edges.reset_index(inplace=True)
 gdf_edges['id']=np.arange(gdf_edges.shape[0])
 ```
 #### 1.3.3 更具路网的字段确定需要处理的列
 假设路网的字段为：起点id，终点id，路段长度，路段方向（未定义-1，双向1，正向2，反向3），路段等级，路段限速。
-```
+```python
 #添加需要处理的列
 gdf_edges['start_id'] = gdf_edges['u']
 gdf_edges['end_id'] = gdf_edges['v']
@@ -117,7 +117,7 @@ gdf_edges['direction'] = gdf_edges.apply(lambda row: 2 if row['oneway'] == True 
 gdf_selected['speed_limit'] = gdf_selected['speed_limit'].apply(lambda x: x if isinstance(x, int) else max(x))
 ```
 #### 1.3.4 成功新生成路段起点与终点id
-```
+```python
 # 合并两列并找出所有唯一值
 unique_values = pd.concat([gdf_edges['start_id'], gdf_edges['end_id']]).unique()
 # 为每个唯一值生成编号，格式为 "t_n"
@@ -130,12 +130,12 @@ gdf_edges['start_id'] = gdf_edges['start_id'].str.replace('t_', '')
 gdf_edges['end_id'] = gdf_edges['end_id'].str.replace('t_', '')
 ```
 #### 1.3.5 异常值的处理
-```
+```python
 #空值的填充
 gdf_edges = gdf_edges.fillna(0)
 ```
 #### 1.3.6 路网数据的存储
-```
+```python
 gdf_selected = gdf_edges[['index', 'geometry', 'start_id', 'end_id', 'direction', 'level' , 'speed_limit','lengthInMeter']]
 gdf_selected.to_csv('outputchengdu.csv', sep='|', index=False)
 ```
