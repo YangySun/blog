@@ -1051,7 +1051,7 @@ home_top:
   timemode: date #date/updated
   title: 管你看没看完
   subTitle: 看就完了。
-  siteText: anheyu.com
+  siteText:
   category:
     - name: 大数据
       path: /categories/大数据/
@@ -1074,10 +1074,10 @@ home_top:
 #    swiper_css: https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css #swiper css依赖
 #    swiper_js: https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.js #swiper js依赖
   banner:
-    tips: 新品主题
-    title: Theme-AnZhiYu
+    tips: 建设中
+    title: 建设中
     image: https://bu.dusays.com/2023/05/13/645fa3cf90d70.webp
-    link: https://docs.anheyu.com/
+    link:
 
 # 朋友圈配置
 friends_vue:
