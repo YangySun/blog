@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cf44bac3-942f-433d-b1ff-218edf6be87c" name="Changes" comment="format">
-      <change afterPath="$PROJECT_DIR$/google8825d83b6be6110e.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="cf44bac3-942f-433d-b1ff-218edf6be87c" name="Changes" comment="add google search">
+      <change beforePath="$PROJECT_DIR$/_config.anzhiyu.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.anzhiyu.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +50,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\note\blog" />
       <recent name="D:\note\blog\themes\anzhiyu\source\img\friend" />
       <recent name="D:\note\blog\themes\anzhiyu" />
     </key>
@@ -81,7 +82,7 @@
       <workItem from="1731895599973" duration="8816000" />
       <workItem from="1732086101850" duration="1289000" />
       <workItem from="1732088078900" duration="1752000" />
-      <workItem from="1732095885504" duration="2170000" />
+      <workItem from="1732095885504" duration="2606000" />
     </task>
     <task id="LOCAL-00001" summary="add">
       <option name="closed" value="true" />
@@ -235,7 +236,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732090005789</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="add google search">
+      <option name="closed" value="true" />
+      <created>1732105172660</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1732105172660</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -271,6 +280,7 @@
     <MESSAGE value="add friend link" />
     <MESSAGE value="add about.yml" />
     <MESSAGE value="format" />
-    <option name="LAST_COMMIT_MESSAGE" value="format" />
+    <MESSAGE value="add google search" />
+    <option name="LAST_COMMIT_MESSAGE" value="add google search" />
   </component>
 </project>

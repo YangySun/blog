@@ -1329,3 +1329,6 @@ CDN:
   # waterfall:
   # ali_iconfont_css:
   # accesskey_js:
+
+  sitemap:
+    path: sitemap.xml
