@@ -38,6 +38,7 @@ jobs:
       - name: Add Custom HTML File
         run: |
           cp google8825d83b6be6110e.html public/
+          cp robots.txt public/
 
       - name: Configure Git
         run: |
