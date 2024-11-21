@@ -10,7 +10,6 @@ cover: /img/roadNetwork.png
 sticky: 1
 ---
 # 路网提取教程V1.0
-Start Lab-孙杨洋 时空实验室 2024-05-09 重庆
 ## 一.基于Python的路网提取
 ### 1.1 环境准备
 #### 1.1.1 Python的安装
