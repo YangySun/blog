@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cf44bac3-942f-433d-b1ff-218edf6be87c" name="Changes" comment="add parquet">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/robots.txt" beforeDir="false" afterPath="$PROJECT_DIR$/robots.txt" afterDir="false" />
-    </list>
+    <list default="true" id="cf44bac3-942f-433d-b1ff-218edf6be87c" name="Changes" comment="add parquet" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -86,7 +83,7 @@
       <workItem from="1732086101850" duration="1289000" />
       <workItem from="1732088078900" duration="1752000" />
       <workItem from="1732095885504" duration="24814000" />
-      <workItem from="1732238935751" duration="617000" />
+      <workItem from="1732238935751" duration="1286000" />
     </task>
     <task id="LOCAL-00001" summary="add">
       <option name="closed" value="true" />
@@ -288,7 +285,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732198013162</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="add parquet">
+      <option name="closed" value="true" />
+      <created>1732241831238</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1732241831238</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
