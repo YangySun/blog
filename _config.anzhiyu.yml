@@ -349,7 +349,7 @@ valine:
 # https://waline.js.org/
 waline:
   serverURL: https://waline-1t7u8meni-syy775959301163coms-projects.vercel.app
-  bg: https://waline-1t7u8meni-syy775959301163coms-projects.vercel.app/ui
+  bg:
   pageview: false
   meta_css: false # 是否引入 waline-meta.css ,以便显示 meta图标
   imageUploader: true # 配置为 > 换行后可自定义图片上传逻辑，示例: https://waline.js.org/cookbook/customize/upload-image.html#案例
