@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cf44bac3-942f-433d-b1ff-218edf6be87c" name="Changes" comment="update">
+    <list default="true" id="cf44bac3-942f-433d-b1ff-218edf6be87c" name="Changes" comment="add commit system">
+      <change afterPath="$PROJECT_DIR$/themes/anzhiyu/source/img/shangban.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/themes/anzhiyu/source/img/xiaban.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_config.anzhiyu.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.anzhiyu.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.json" beforeDir="false" afterPath="$PROJECT_DIR$/db.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +40,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/note/blog/themes/anzhiyu/source",
+    "last_opened_file_path": "D:/note/blog/themes/anzhiyu/source/img",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -49,8 +53,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\note\blog\themes\anzhiyu\source" />
       <recent name="D:\note\blog\themes\anzhiyu\source\img" />
+      <recent name="D:\note\blog\themes\anzhiyu\source" />
       <recent name="D:\note\blog\source\images\cover_image" />
       <recent name="D:\note\blog" />
       <recent name="D:\note\blog\themes\anzhiyu\source\img\friend" />
@@ -87,7 +91,8 @@
       <workItem from="1732088078900" duration="1752000" />
       <workItem from="1732095885504" duration="24814000" />
       <workItem from="1732238935751" duration="2539000" />
-      <workItem from="1732501483669" duration="5852000" />
+      <workItem from="1732501483669" duration="7947000" />
+      <workItem from="1732522559440" duration="1120000" />
     </task>
     <task id="LOCAL-00001" summary="add">
       <option name="closed" value="true" />
@@ -337,7 +342,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732519212002</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="add commit system">
+      <option name="closed" value="true" />
+      <created>1732519553767</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1732519553767</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -378,6 +391,7 @@
     <MESSAGE value="add parquet" />
     <MESSAGE value="update pages" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="add commit system" />
+    <option name="LAST_COMMIT_MESSAGE" value="add commit system" />
   </component>
 </project>
