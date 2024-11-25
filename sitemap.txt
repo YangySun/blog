@@ -1,0 +1,13 @@
+https://yangysun.github.io/blog/about/index.html
+https://yangysun.github.io/blog/categories/index.html
+https://yangysun.github.io/blog/link/index.html
+https://yangysun.github.io/blog/tags/index.html
+https://yangysun.github.io/blog/2024/11/12/%E4%BD%BF%E7%94%A8Python%E6%8F%90%E5%8F%96%E5%9F%8E%E5%B8%82%E8%B7%AF%E7%BD%91/
+https://yangysun.github.io/blog/2024/11/18/Parquet/
+https://yangysun.github.io/blog
+https://yangysun.github.io/blog/tags/%E8%B7%AF%E7%BD%91/
+https://yangysun.github.io/blog/tags/Python/
+https://yangysun.github.io/blog/tags/parquet/
+https://yangysun.github.io/blog/tags/%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8/
+https://yangysun.github.io/blog/categories/%E6%97%B6%E7%A9%BA%E6%95%B0%E6%8D%AE/
+https://yangysun.github.io/blog/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/
