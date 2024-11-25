@@ -7,6 +7,7 @@ tags:
 categories: 
   - 时空数据
 cover: /img/roadNetwork.png
+top_img: /img/roadNetwork.png
 sticky: 1
 ---
 # 路网提取教程V1.0
