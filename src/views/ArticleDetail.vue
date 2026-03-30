@@ -15,14 +15,14 @@
       <div class="article-navigation">
         <router-link
           v-if="prevArticle"
-          :to="`/article/${prevArticle.id}`"
+          :to="`/blog/article/${prevArticle.id}`"
           class="nav-link prev"
         >
           ← {{ prevArticle.title }}
         </router-link>
         <router-link
           v-if="nextArticle"
-          :to="`/article/${nextArticle.id}`"
+          :to="`/blog/article/${nextArticle.id}`"
           class="nav-link next"
         >
           {{ nextArticle.title }} →

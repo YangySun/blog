@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="`/article/${article.id}`" class="article-card">
+  <router-link :to="`/blog/article/${article.id}`" class="article-card">
     <h3 class="article-title">{{ article.title }}</h3>
     <p class="article-description">{{ article.description }}</p>
     <div class="article-meta">

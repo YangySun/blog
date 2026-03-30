@@ -15,7 +15,7 @@
         />
       </div>
       <div class="view-all">
-        <router-link to="/articles" class="btn btn-primary">
+        <router-link to="/blog/articles" class="btn btn-primary">
           查看全部文章
         </router-link>
       </div>

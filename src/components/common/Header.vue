@@ -1,14 +1,14 @@
 <template>
   <header class="header">
     <div class="container header-container">
-      <router-link to="/" class="logo">
+      <router-link to="/blog/" class="logo">
         <h1>My Blog</h1>
       </router-link>
       <nav class="nav">
-        <router-link to="/" class="nav-link">首页</router-link>
-        <router-link to="/articles" class="nav-link">文章</router-link>
-        <router-link to="/about" class="nav-link">关于</router-link>
-        <router-link to="/links" class="nav-link">友链</router-link>
+        <router-link to="/blog/" class="nav-link">首页</router-link>
+        <router-link to="/blog/articles" class="nav-link">文章</router-link>
+        <router-link to="/blog/about" class="nav-link">关于</router-link>
+        <router-link to="/blog/links" class="nav-link">友链</router-link>
       </nav>
       <ThemeToggle />
     </div>
