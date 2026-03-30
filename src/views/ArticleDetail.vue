@@ -157,10 +157,15 @@ watch(() => route.params.id, async (newId) => {
   left: 0;
   width: 200%;
   height: 80px;
+  opacity: 0.9;
 
   svg {
     width: 100%;
     height: 100%;
+
+    path {
+      fill: rgba(255, 255, 255, 0.95);
+    }
   }
 }
 
