@@ -1,6 +1,6 @@
 <template>
   <div class="category-articles-page">
-    <h1 class="page-title">{{ decodeURIComponent($route.params.name) }}分类</h1>
+    <h1 class="page-title">{{ selectedCategory }}分类</h1>
     
     <div class="category-tabs">
       <button
@@ -13,7 +13,7 @@
       </button>
     </div>
     
-    <div class="articles-grid">
+    <div class="articles-list">
       <ArticleCard
         v-for="(article, index) in filteredArticles"
         :key="article.id"
@@ -42,6 +42,7 @@ const selectedCategory = ref('')
 const allCategories = computed(() => store.allCategories)
 
 const filteredArticles = computed(() => {
+  if (!selectedCategory.value) return []
   return store.articles.filter(article => article.category === selectedCategory.value)
 })
 
@@ -107,10 +108,10 @@ onMounted(async () => {
   }
 }
 
-.articles-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: $spacing-xl;
+.articles-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
 }
 
 .no-results {

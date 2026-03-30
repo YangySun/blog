@@ -84,7 +84,7 @@ import ThemeToggle from './ThemeToggle.vue'
   position: relative;
 
   &:hover .dropdown-menu {
-    display: block;
+    display: flex;
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -110,24 +110,24 @@ import ThemeToggle from './ThemeToggle.vue'
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-10px);
+  left: 0;
+  transform: translateY(10px);
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: $border-radius;
   box-shadow: $shadow-hover;
-  min-width: 400px;
-  padding: $spacing-sm;
+  width: max-content;
+  padding: $spacing-xs;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: row;
   gap: $spacing-xs;
+  z-index: 1000;
 }
 
 .dropdown-item {
-  flex: 1;
   padding: $spacing-sm $spacing-md;
   color: var(--text-primary);
   text-decoration: none;
@@ -135,6 +135,7 @@ import ThemeToggle from './ThemeToggle.vue'
   font-size: $font-size-sm;
   text-align: center;
   border-radius: $border-radius;
+  white-space: nowrap;
 
   &:hover {
     background: var(--bg-secondary);
