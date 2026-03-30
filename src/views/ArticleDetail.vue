@@ -14,28 +14,6 @@
             </span>
           </div>
         </div>
-        <div class="wave-container">
-          <div class="hero-wave wave-1">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.12)"></path>
-            </svg>
-          </div>
-          <div class="hero-wave wave-2">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.2)"></path>
-            </svg>
-          </div>
-          <div class="hero-wave wave-3">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.3)"></path>
-            </svg>
-          </div>
-          <div class="hero-wave wave-4">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,1)"></path>
-            </svg>
-          </div>
-        </div>
       </div>
       <div class="article-body">
         <div class="article-content" ref="contentRef" v-html="article.content"></div>
@@ -155,74 +133,13 @@ watch(() => route.params.id, async (newId) => {
 
 .article-hero {
   position: relative;
-  padding: 120px 20px 100px;
+  padding: 120px 20px 60px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background-color: inherit;
   color: white;
   text-align: center;
-  overflow: hidden;
   margin: 0;
-}
-
-.wave-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-}
-
-.hero-wave {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 200%;
-  height: 80px;
-
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.wave-1 {
-  opacity: 0.15;
-  animation: waveMove1 12s ease-in-out infinite;
-}
-
-.wave-2 {
-  opacity: 0.25;
-  animation: waveMove2 10s ease-in-out infinite;
-}
-
-.wave-3 {
-  opacity: 0.35;
-  animation: waveMove3 8s ease-in-out infinite;
-}
-
-.wave-4 {
-  opacity: 1;
-  animation: waveMove4 6s ease-in-out infinite;
-}
-
-@keyframes waveMove1 {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-20%); }
-}
-
-@keyframes waveMove2 {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-25%); }
-}
-
-@keyframes waveMove3 {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-15%); }
-}
-
-@keyframes waveMove4 {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-30%); }
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
 }
 
 .hero-content {

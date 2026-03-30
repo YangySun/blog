@@ -28,10 +28,11 @@ import BackToTop from './components/common/BackToTop.vue'
 
 .main-content {
   flex: 1;
-  padding: 20px;
+  padding: 84px 20px 20px;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  box-sizing: border-box;
 }
 </style>
 
