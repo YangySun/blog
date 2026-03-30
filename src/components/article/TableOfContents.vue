@@ -8,9 +8,9 @@
         :class="['toc-item', { active: activeHeading === index }]"
       >
         <a
-          :href="`#${heading.id}`"
-          @click.prevent="scrollToHeading(heading.id, index)"
-          :style="{ paddingLeft: `${heading.level * 16}px` }"
+          href="javascript:void(0)"
+          @click.prevent="$emit('navigate', heading.id)"
+          :style="{ paddingLeft: `${(heading.level - 1) * 16}px` }"
         >
           {{ heading.text }}
         </a>
@@ -20,71 +20,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps({
-  content: {
-    type: String,
-    required: true
+  headings: {
+    type: Array,
+    default: () => []
   }
 })
 
-const headings = ref([])
+const emit = defineEmits(['navigate'])
+
 const activeHeading = ref(-1)
 
-function extractHeadings() {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(props.content, 'text/html')
-  const headingElements = doc.documentElement.querySelectorAll('h1, h2, h3, h4, h5, h6')
+function updateActiveHeading() {
+  const elements = document.querySelectorAll('.article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5, .article-content h6')
   
-  headings.value = Array.from(headingElements).map((el, index) => {
-    const text = el.textContent.trim()
-    const id = `heading-${index}`
-    el.id = id
-    return {
-      id,
-      text,
-      level: parseInt(el.tagName.charAt(1))
+  let currentIndex = -1
+  elements.forEach((el, index) => {
+    const rect = el.getBoundingClientRect()
+    if (rect.top < 120) {
+      currentIndex = index
     }
   })
+  
+  activeHeading.value = currentIndex
 }
 
-function scrollToHeading(id, index) {
-  activeHeading.value = index
-  const element = document.getElementById(id)
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-}
-
-function handleScroll() {
-  const headingElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id
-        const index = headings.value.findIndex(h => h.id === id)
-        if (index !== -1) {
-          activeHeading.value = index
-        }
-      }
-    })
-  }, { threshold: 0.5 })
-
-  headingElements.forEach(el => observer.observe(el))
-}
-
-onMounted(() => {
-  extractHeadings()
-  setTimeout(handleScroll, 100)
+watch(() => props.headings, () => {
+  setTimeout(updateActiveHeading, 100)
 })
 
-onUnmounted(() => {
-  const headingElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-  headingElements.forEach(el => {
-    el.removeAttribute('id')
-  })
-})
+if (typeof window !== 'undefined') {
+  window.addEventListener('scroll', updateActiveHeading)
+}
 </script>
 
 <style scoped lang="scss">
@@ -97,17 +66,19 @@ onUnmounted(() => {
   border: 1px solid var(--border-color);
   border-radius: $border-radius;
   padding: $spacing-lg;
-  box-shadow: var(--shadow);
-  max-width: 300px;
+  box-shadow: $shadow;
+  max-width: 280px;
+  min-width: 200px;
   z-index: 50;
   transition: $transition;
 }
 
 .toc-title {
-  font-size: $font-size-lg;
+  font-size: $font-size-md;
+  font-weight: 600;
   margin-bottom: $spacing-md;
   color: var(--text-primary);
-  border-bottom: 2px solid var(--border-color);
+  border-bottom: 2px solid var(--accent-color);
   padding-bottom: $spacing-sm;
 }
 
@@ -118,18 +89,19 @@ onUnmounted(() => {
 }
 
 .toc-item {
-  margin-bottom: $spacing-sm;
+  margin-bottom: 2px;
 }
 
 .toc-item a {
   display: block;
   color: var(--text-secondary);
   text-decoration: none;
-  padding: $spacing-xs 0;
-  border-radius: $border-radius;
-  transition: $transition;
-  font-size: $font-size-sm;
-  line-height: 1.5;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  line-height: 1.4;
+  cursor: pointer;
 
   &:hover {
     background: var(--bg-secondary);
@@ -143,7 +115,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .toc {
     display: none;
   }
