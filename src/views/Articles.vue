@@ -40,16 +40,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useStore } from '../store'
 import ArticleCard from '../components/article/ArticleCard.vue'
 import CategoryFilter from '../components/article/CategoryFilter.vue'
 import TagFilter from '../components/article/TagFilter.vue'
 
 const store = useStore()
-const searchQuery = ref('')
 
-const { allCategories, allTags, filteredArticles } = store
+const { allCategories, allTags, filteredArticles, searchQuery } = store
 
 function setSelectedCategory(category) {
   store.setSelectedCategory(category)
