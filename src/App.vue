@@ -28,9 +28,7 @@ import BackToTop from './components/common/BackToTop.vue'
 
 .main-content {
   flex: 1;
-  padding: 84px 20px 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0;
   width: 100%;
   box-sizing: border-box;
 }
