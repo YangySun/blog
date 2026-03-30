@@ -1,9 +1,8 @@
 <template>
-  <header class="header" :class="{ 'header--scrolled': isScrolled }">
+  <header class="header" :class="{ 'header--article-scrolled': isArticleScrolled }">
     <div class="container header-container">
       <router-link to="/blog/" class="logo">
-        <h1 v-if="!isScrolled || !currentArticleTitle">My Blog</h1>
-        <h1 v-else class="article-title-scroll">{{ currentArticleTitle }}</h1>
+        <h1>My Blog</h1>
       </router-link>
       <nav class="nav">
         <router-link to="/blog/" class="nav-link">首页</router-link>
@@ -32,6 +31,11 @@
       </nav>
       <ThemeToggle />
     </div>
+    <transition name="slide-fade">
+      <div v-if="isArticleScrolled" class="article-title-bar">
+        <span class="article-title">{{ currentArticleTitle }}</span>
+      </div>
+    </transition>
   </header>
 </template>
 
@@ -41,11 +45,12 @@ import { useRoute } from 'vue-router'
 import ThemeToggle from './ThemeToggle.vue'
 
 const route = useRoute()
-const isScrolled = ref(false)
+const isArticleScrolled = ref(false)
 const currentArticleTitle = ref('')
 
 function handleScroll() {
-  isScrolled.value = window.scrollY > 100
+  const isArticlePage = route.path.includes('/article/')
+  isArticleScrolled.value = isArticlePage && window.scrollY > 100
 }
 
 watch(() => route.params.id, async (newId) => {
@@ -57,6 +62,10 @@ watch(() => route.params.id, async (newId) => {
     currentArticleTitle.value = ''
   }
 }, { immediate: true })
+
+watch(() => route.path, () => {
+  handleScroll()
+})
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
@@ -80,17 +89,6 @@ onUnmounted(() => {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
-  &--scrolled {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-
-    .logo h1 {
-      color: var(--text-primary);
-      font-size: $font-size-md;
-    }
-  }
 }
 
 .header-container {
@@ -103,18 +101,9 @@ onUnmounted(() => {
 .logo {
   h1 {
     font-size: $font-size-xl;
-    color: white;
+    color: var(--accent-color);
     margin: 0;
-    transition: all 0.4s ease;
-  }
-
-  .article-title-scroll {
-    font-size: $font-size-md;
-    font-weight: 600;
-    max-width: 400px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    transition: color 0.4s ease;
   }
 }
 
@@ -125,25 +114,14 @@ onUnmounted(() => {
 }
 
 .nav-link {
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text-primary);
   font-weight: 500;
   transition: $transition;
   text-decoration: none;
 
   &:hover,
   &.router-link-active {
-    color: white;
-  }
-}
-
-.header--scrolled {
-  .nav-link {
-    color: var(--text-primary);
-
-    &:hover,
-    &.router-link-active {
-      color: var(--accent-color);
-    }
+    color: var(--accent-color);
   }
 }
 
@@ -170,13 +148,7 @@ onUnmounted(() => {
 .dropdown-arrow {
   font-size: 10px;
   transition: transform 0.3s ease;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.header--scrolled {
-  .dropdown-arrow {
-    color: var(--text-secondary);
-  }
+  color: var(--text-secondary);
 }
 
 .dropdown:hover .dropdown-arrow {
@@ -229,6 +201,44 @@ onUnmounted(() => {
       opacity: 1;
     }
   }
+}
+
+.article-title-bar {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: $spacing-sm $spacing-lg;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 99;
+}
+
+.article-title {
+  font-size: $font-size-md;
+  color: var(--text-primary);
+  font-weight: 600;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 
 @media (max-width: 768px) {

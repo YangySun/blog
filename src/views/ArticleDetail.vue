@@ -2,11 +2,6 @@
   <div class="article-detail">
     <div v-if="article" class="article-container">
       <div class="article-hero" :style="{ backgroundColor: article.heroColor || '#667eea' }">
-        <div class="hero-wave wave-animation">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="var(--bg-primary)"></path>
-          </svg>
-        </div>
         <div class="hero-content">
           <h1 class="article-title">{{ article.title }}</h1>
           <div class="article-meta">
@@ -19,10 +14,27 @@
             </span>
           </div>
         </div>
-        <div class="hero-wave-bottom wave-animation">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="var(--bg-primary)"></path>
-          </svg>
+        <div class="wave-container">
+          <div class="hero-wave wave-1">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.15)"></path>
+            </svg>
+          </div>
+          <div class="hero-wave wave-2">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.25)"></path>
+            </svg>
+          </div>
+          <div class="hero-wave wave-3">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.35)"></path>
+            </svg>
+          </div>
+          <div class="hero-wave wave-4">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+              <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="var(--bg-primary)"></path>
+            </svg>
+          </div>
         </div>
       </div>
       <div class="article-body">
@@ -151,39 +163,65 @@ watch(() => route.params.id, async (newId) => {
   overflow: hidden;
 }
 
+.wave-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+}
+
 .hero-wave {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 200%;
   height: 80px;
-  opacity: 0.9;
 
   svg {
     width: 100%;
     height: 100%;
-
-    path {
-      fill: rgba(255, 255, 255, 0.95);
-    }
   }
 }
 
-.hero-wave-bottom {
-  display: none;
+.wave-1 {
+  opacity: 0.15;
+  animation: waveMove1 12s ease-in-out infinite;
 }
 
-.wave-animation {
-  animation: waveMove 8s ease-in-out infinite;
+.wave-2 {
+  opacity: 0.25;
+  animation: waveMove2 10s ease-in-out infinite;
 }
 
-@keyframes waveMove {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(-25%);
-  }
+.wave-3 {
+  opacity: 0.35;
+  animation: waveMove3 8s ease-in-out infinite;
+}
+
+.wave-4 {
+  opacity: 1;
+  animation: waveMove4 6s ease-in-out infinite;
+}
+
+@keyframes waveMove1 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-20%); }
+}
+
+@keyframes waveMove2 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-25%); }
+}
+
+@keyframes waveMove3 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-15%); }
+}
+
+@keyframes waveMove4 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-30%); }
 }
 
 .hero-content {
