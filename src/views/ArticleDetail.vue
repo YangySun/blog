@@ -138,7 +138,8 @@ watch(() => route.params.id, async (newId) => {
 @import '../assets/styles/variables.scss';
 
 .article-detail {
-  margin: -20px;
+  margin: 0;
+  padding-top: 64px;
 }
 
 .article-container {
@@ -147,14 +148,13 @@ watch(() => route.params.id, async (newId) => {
 
 .article-hero {
   position: relative;
+  margin-top: -64px;
   padding: 120px 20px 80px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   text-align: center;
-  margin: 0;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
   overflow: hidden;
+  min-height: 300px;
 }
 
 .hero-content {
@@ -202,22 +202,22 @@ watch(() => route.params.id, async (newId) => {
 
 @keyframes waveMove1 {
   0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-25%); }
+  50% { transform: translateX(-40%); }
 }
 
 @keyframes waveMove2 {
   0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-30%); }
+  50% { transform: translateX(-45%); }
 }
 
 @keyframes waveMove3 {
   0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-20%); }
+  50% { transform: translateX(-35%); }
 }
 
 @keyframes waveMove4 {
   0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-35%); }
+  50% { transform: translateX(-50%); }
 }
 
 .article-title {

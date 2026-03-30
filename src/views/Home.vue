@@ -5,11 +5,20 @@
       <p class="hero-subtitle">分享技术，记录生活</p>
     </section>
 
-    <section class="latest-articles">
-      <h2 class="section-title">最新文章</h2>
+    <section class="articles-section">
+      <div class="section-tabs">
+        <button
+          v-for="category in categories"
+          :key="category"
+          @click="selectedCategory = category"
+          :class="['tab-btn', { active: selectedCategory === category }]"
+        >
+          {{ category }}
+        </button>
+      </div>
       <div class="articles-grid">
         <ArticleCard
-          v-for="(article, index) in latestArticles"
+          v-for="(article, index) in filteredArticles"
           :key="article.id"
           :article="article"
           class="scale-animation"
@@ -26,18 +35,33 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useStore } from '../store'
 import ArticleCard from '../components/article/ArticleCard.vue'
 
 const store = useStore()
 const latestArticles = ref([])
+const selectedCategory = ref('全部')
+
+const categories = computed(() => {
+  const cats = new Set(latestArticles.value.map(a => a.category))
+  return ['全部', ...Array.from(cats)]
+})
+
+const filteredArticles = computed(() => {
+  if (selectedCategory.value === '全部') {
+    return latestArticles.value.slice(0, 6)
+  }
+  return latestArticles.value
+    .filter(a => a.category === selectedCategory.value)
+    .slice(0, 6)
+})
 
 onMounted(async () => {
   const { loadArticles } = await import('../utils/markdown')
   const articles = await loadArticles()
   store.setArticles(articles)
-  latestArticles.value = articles.slice(0, 6)
+  latestArticles.value = articles
 })
 </script>
 
@@ -70,11 +94,37 @@ onMounted(async () => {
   opacity: 0.95;
 }
 
-.section-title {
-  font-size: $font-size-xl;
+.articles-section {
+  margin-bottom: $spacing-xl;
+}
+
+.section-tabs {
+  display: flex;
+  gap: $spacing-sm;
   margin-bottom: $spacing-lg;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid var(--border-color);
+  border-radius: $border-radius;
+  background: var(--bg-primary);
   color: var(--text-primary);
-  text-align: center;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent-color);
+  }
+
+  &.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+  }
 }
 
 .articles-grid {
