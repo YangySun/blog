@@ -24,11 +24,11 @@ import BackToTop from './components/common/BackToTop.vue'
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: 64px;
 }
 
 .main-content {
   flex: 1;
-  padding-top: 84px;
   width: 100%;
   box-sizing: border-box;
 }
