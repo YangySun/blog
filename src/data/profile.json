@@ -1,0 +1,29 @@
+{
+  "name": "Your Name",
+  "avatar": "/images/avatar/default.jpg",
+  "bio": "前端开发工程师，热爱技术，喜欢分享。专注于Vue.js、JavaScript等前端技术，致力于构建优雅的用户界面。",
+  "email": "your.email@example.com",
+  "github": "https://github.com/yourusername",
+  "skills": [
+    "Vue.js",
+    "JavaScript",
+    "TypeScript",
+    "CSS/SCSS",
+    "HTML5",
+    "Git",
+    "Webpack",
+    "Vite"
+  ],
+  "experience": [
+    {
+      "title": "前端开发工程师",
+      "date": "2020 - 至今",
+      "description": "负责公司前端项目的开发和维护，使用Vue.js构建用户界面，优化页面性能，提升用户体验。"
+    },
+    {
+      "title": "计算机科学学士",
+      "date": "2016 - 2020",
+      "description": "毕业于XX大学计算机科学与技术专业，主修Web开发、数据结构与算法等课程。"
+    }
+  ]
+}

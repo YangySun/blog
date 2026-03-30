@@ -1,0 +1,28 @@
+{
+  "links": [
+    {
+      "name": "Vue.js",
+      "url": "https://vuejs.org",
+      "description": "渐进式JavaScript框架",
+      "category": "技术"
+    },
+    {
+      "name": "MDN Web Docs",
+      "url": "https://developer.mozilla.org",
+      "description": "Web开发权威文档",
+      "category": "技术"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com",
+      "description": "代码托管平台",
+      "category": "工具"
+    },
+    {
+      "name": "Stack Overflow",
+      "url": "https://stackoverflow.com",
+      "description": "程序员问答社区",
+      "category": "社区"
+    }
+  ]
+}
