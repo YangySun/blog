@@ -144,12 +144,13 @@ watch(() => route.params.id, async (newId) => {
 .article-hero {
   position: relative;
   padding: 140px 20px 80px;
+  margin: -84px -20px 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   text-align: center;
   overflow: hidden;
   min-height: 300px;
-  width: 100%;
+  width: 100vw;
 }
 
 .hero-content {
