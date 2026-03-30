@@ -62,9 +62,9 @@ if (typeof window !== 'undefined') {
 .toc {
   position: sticky;
   top: 80px;
-  background: rgba(var(--bg-primary-rgb, 255, 255, 255), 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);
   border-radius: $border-radius;
   padding: $spacing-lg;
@@ -75,7 +75,7 @@ if (typeof window !== 'undefined') {
   transition: all 0.3s ease;
 
   &:hover {
-    background: var(--bg-primary);
+    background: rgba(255, 255, 255, 0.98);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   }
 }

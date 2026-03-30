@@ -138,8 +138,7 @@ watch(() => route.params.id, async (newId) => {
 @import '../assets/styles/variables.scss';
 
 .article-detail {
-  margin: -84px -20px 0;
-  padding-top: 64px;
+  margin: 0;
 }
 
 .article-container {
