@@ -78,8 +78,10 @@ onMounted(async () => {
 }
 
 .article-container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  gap: $spacing-xl;
 }
 
 .article-title {
@@ -113,6 +115,7 @@ onMounted(async () => {
   display: flex;
   gap: $spacing-xl;
   position: relative;
+  flex-direction: row-reverse;
 }
 
 .article-content {
@@ -120,6 +123,7 @@ onMounted(async () => {
   font-size: $font-size-md;
   line-height: 1.8;
   color: var(--text-primary);
+  min-width: 0;
 
   :deep(h2) {
     font-size: $font-size-xl;

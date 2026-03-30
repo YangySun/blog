@@ -110,8 +110,9 @@ onMounted(async () => {
 
 .articles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: $spacing-lg;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: $spacing-xl;
+  margin-bottom: $spacing-xl;
 }
 
 .no-results {

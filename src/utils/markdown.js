@@ -61,6 +61,7 @@ export async function loadArticles() {
       title: frontmatter.title || 'Untitled',
       date: frontmatter.date || new Date().toISOString(),
       tags: frontmatter.tags || [],
+      category: frontmatter.category || '未分类',
       description: frontmatter.description || '',
       content: marked.parse(body)
     })
@@ -85,6 +86,7 @@ export async function loadArticle(id) {
     title: frontmatter.title || 'Untitled',
     date: frontmatter.date || new Date().toISOString(),
     tags: frontmatter.tags || [],
+    category: frontmatter.category || '未分类',
     description: frontmatter.description || '',
     content: marked.parse(body)
   }

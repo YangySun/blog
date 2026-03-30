@@ -39,7 +39,7 @@ function extractHeadings() {
   
   headings.value = Array.from(headingElements).map((el, index) => {
     const text = el.textContent.trim()
-    const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\u4e00-\u9fa5]/g, '')
+    const id = `heading-${index}`
     el.id = id
     return {
       id,
