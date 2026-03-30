@@ -48,7 +48,13 @@ import TagFilter from '../components/article/TagFilter.vue'
 
 const store = useStore()
 
-const { allCategories, allTags, filteredArticles, searchQuery } = store
+const allCategories = computed(() => store.allCategories)
+const allTags = computed(() => store.allTags)
+const filteredArticles = computed(() => store.filteredArticles)
+const searchQuery = computed({
+  get: () => store.searchQuery,
+  set: (val) => store.setSearchQuery(val)
+})
 
 function setSelectedCategory(category) {
   store.setSelectedCategory(category)
