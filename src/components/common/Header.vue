@@ -1,11 +1,10 @@
 <template>
-  <header class="header" :class="{ 'header--article': isArticlePage, 'header--scrolled': isScrolled }">
+  <header class="header" :class="{ 'header--transparent': isArticlePage && !isScrolled, 'header--scrolled': isScrolled }">
     <div class="container header-container">
       <router-link to="/blog/" class="logo">
-        <h1 v-if="!isArticlePage || !isScrolled">My Blog</h1>
-        <h1 v-else class="article-title-header">{{ currentArticleTitle }}</h1>
+        <h1>My Blog</h1>
       </router-link>
-      <nav class="nav" v-if="!isArticlePage || !isScrolled">
+      <nav class="nav">
         <router-link to="/blog/" class="nav-link">首页</router-link>
         <div class="dropdown">
           <router-link to="/blog/articles" class="nav-link dropdown-toggle">
@@ -30,7 +29,7 @@
         <router-link to="/blog/about" class="nav-link">关于</router-link>
         <router-link to="/blog/links" class="nav-link">友链</router-link>
       </nav>
-      <ThemeToggle v-if="!isArticlePage || !isScrolled" />
+      <ThemeToggle />
     </div>
   </header>
 </template>
@@ -43,26 +42,17 @@ import ThemeToggle from './ThemeToggle.vue'
 const route = useRoute()
 const isScrolled = ref(false)
 const isArticlePage = ref(false)
-const currentArticleTitle = ref('')
 
 function handleScroll() {
   if (isArticlePage.value) {
     isScrolled.value = window.scrollY > 100
+  } else {
+    isScrolled.value = true
   }
 }
 
-watch(() => route.params.id, async (newId) => {
-  if (newId) {
-    isArticlePage.value = true
-    isScrolled.value = window.scrollY > 100
-    const { loadArticle } = await import('../../utils/markdown')
-    const article = await loadArticle(newId)
-    currentArticleTitle.value = article?.title || ''
-  } else {
-    isArticlePage.value = false
-    isScrolled.value = false
-    currentArticleTitle.value = ''
-  }
+watch(() => route.params.id, (newId) => {
+  isArticlePage.value = !!newId
 }, { immediate: true })
 
 watch(() => route.path, () => {
@@ -89,18 +79,19 @@ onUnmounted(() => {
   right: 0;
   z-index: 100;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
-  &--article {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  &--transparent {
+    background: transparent;
+    box-shadow: none;
 
     .logo h1 {
       color: white;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .nav-link {
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 
       &:hover,
       &.router-link-active {
@@ -118,17 +109,20 @@ onUnmounted(() => {
       &:hover {
         background-color: rgba(255, 255, 255, 0.3);
       }
+
+      .sun-icon,
+      .moon-icon {
+        color: white;
+      }
     }
   }
 
   &--scrolled {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+    background: var(--bg-primary);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
-    .logo h1,
-    .article-title-header {
-      color: var(--text-primary);
+    .logo h1 {
+      color: var(--accent-color);
     }
 
     .nav-link {
@@ -142,14 +136,6 @@ onUnmounted(() => {
 
     .dropdown-arrow {
       color: var(--text-secondary);
-    }
-
-    .theme-toggle {
-      background-color: var(--bg-secondary);
-      
-      &:hover {
-        background-color: var(--bg-primary);
-      }
     }
   }
 }
@@ -167,16 +153,6 @@ onUnmounted(() => {
     color: var(--accent-color);
     margin: 0;
     transition: all 0.4s ease;
-  }
-
-  .article-title-header {
-    font-size: $font-size-lg;
-    font-weight: 600;
-    max-width: 600px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: center;
   }
 }
 

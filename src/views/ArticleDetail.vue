@@ -138,7 +138,7 @@ watch(() => route.params.id, async (newId) => {
 @import '../assets/styles/variables.scss';
 
 .article-detail {
-  margin: 0;
+  margin: -64px 0 0;
 }
 
 .article-container {
@@ -147,9 +147,7 @@ watch(() => route.params.id, async (newId) => {
 
 .article-hero {
   position: relative;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-  padding: 120px 0 80px;
+  padding: 140px 20px 80px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   text-align: center;

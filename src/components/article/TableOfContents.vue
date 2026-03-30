@@ -1,23 +1,21 @@
 <template>
   <div class="toc" v-if="headings.length > 0">
     <h3 class="toc-title">目录</h3>
-    <div class="toc-content">
-      <ul class="toc-list">
-        <li
-          v-for="(heading, index) in headings"
-          :key="index"
-          :class="['toc-item', { active: activeHeading === index }]"
+    <ul class="toc-list">
+      <li
+        v-for="(heading, index) in headings"
+        :key="index"
+        :class="['toc-item', { active: activeHeading === index }]"
+      >
+        <a
+          href="javascript:void(0)"
+          @click.prevent="$emit('navigate', heading.id)"
+          :style="{ paddingLeft: `${(heading.level - 1) * 16}px` }"
         >
-          <a
-            href="javascript:void(0)"
-            @click.prevent="$emit('navigate', heading.id)"
-            :style="{ paddingLeft: `${(heading.level - 1) * 16}px` }"
-          >
-            {{ heading.text }}
-          </a>
-        </li>
-      </ul>
-    </div>
+          {{ heading.text }}
+        </a>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -64,24 +62,21 @@ if (typeof window !== 'undefined') {
 .toc {
   position: sticky;
   top: 80px;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);
   border-radius: $border-radius;
+  padding: $spacing-lg;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   max-width: 280px;
   min-width: 200px;
   z-index: 50;
   transition: all 0.3s ease;
-  overflow: hidden;
 
   &:hover {
     background: rgba(255, 255, 255, 0.98);
-
-    .toc-content {
-      opacity: 1;
-    }
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -92,32 +87,6 @@ if (typeof window !== 'undefined') {
   color: var(--text-primary);
   border-bottom: 2px solid var(--accent-color);
   padding-bottom: $spacing-sm;
-  padding: $spacing-lg $spacing-lg $spacing-sm;
-}
-
-.toc-content {
-  opacity: 0.6;
-  transition: opacity 0.3s ease;
-  max-height: 400px;
-  overflow-y: auto;
-  padding: 0 $spacing-sm $spacing-lg;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 2px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-color);
-  }
 }
 
 .toc-list {
@@ -140,16 +109,20 @@ if (typeof window !== 'undefined') {
   font-size: 13px;
   line-height: 1.4;
   cursor: pointer;
+  opacity: 0.7;
 
   &:hover {
     background: var(--bg-secondary);
     color: var(--accent-color);
+    opacity: 1;
+    transform: translateX(4px);
   }
 
   &.active {
     background: var(--accent-color);
     color: white;
     font-weight: 500;
+    opacity: 1;
   }
 }
 
