@@ -138,17 +138,16 @@ watch(() => route.params.id, async (newId) => {
 @import '../assets/styles/variables.scss';
 
 .article-detail {
-  margin: 0;
+  margin: -84px -20px 0;
   padding-top: 64px;
 }
 
 .article-container {
-  max-width: 100%;
+  width: 100%;
 }
 
 .article-hero {
   position: relative;
-  margin-top: -64px;
   padding: 120px 20px 80px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;

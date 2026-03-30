@@ -62,15 +62,22 @@ if (typeof window !== 'undefined') {
 .toc {
   position: sticky;
   top: 80px;
-  background: var(--bg-primary);
+  background: rgba(var(--bg-primary-rgb, 255, 255, 255), 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border-color);
   border-radius: $border-radius;
   padding: $spacing-lg;
-  box-shadow: $shadow;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   max-width: 280px;
   min-width: 200px;
   z-index: 50;
-  transition: $transition;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: var(--bg-primary);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
 }
 
 .toc-title {
@@ -96,22 +103,26 @@ if (typeof window !== 'undefined') {
   display: block;
   color: var(--text-secondary);
   text-decoration: none;
-  padding: 6px 8px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border-radius: 6px;
   transition: all 0.2s ease;
   font-size: 13px;
   line-height: 1.4;
   cursor: pointer;
+  opacity: 0.7;
 
   &:hover {
     background: var(--bg-secondary);
     color: var(--accent-color);
+    opacity: 1;
+    transform: translateX(4px);
   }
 
   &.active {
     background: var(--accent-color);
     color: white;
     font-weight: 500;
+    opacity: 1;
   }
 }
 

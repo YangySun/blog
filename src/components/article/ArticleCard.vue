@@ -37,19 +37,25 @@ defineProps({
   display: flex;
   flex-direction: column;
   background: var(--bg-primary);
+  border: 1px solid var(--border-color);
   border-radius: $border-radius;
   box-shadow: var(--shadow);
-  transition: $transition;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   overflow: hidden;
   height: 100%;
 
   &:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-hover);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: var(--accent-color);
 
     .card-cover {
-      height: 140px;
+      height: 160px;
+    }
+
+    .article-title {
+      color: var(--accent-color);
     }
   }
 }
