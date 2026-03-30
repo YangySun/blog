@@ -82,12 +82,14 @@ import ThemeToggle from './ThemeToggle.vue'
 
 .dropdown {
   position: relative;
+  display: flex;
+  justify-content: center;
 
   &:hover .dropdown-menu {
     display: flex;
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(10px);
   }
 }
 
@@ -111,13 +113,12 @@ import ThemeToggle from './ThemeToggle.vue'
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(10px);
+  transform: translateX(-50%) translateY(20px);
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: $border-radius;
   box-shadow: $shadow-hover;
   width: max-content;
-  min-width: 100%;
   padding: $spacing-xs;
   opacity: 0;
   visibility: hidden;
