@@ -19,7 +19,11 @@ import Footer from './components/common/Footer.vue'
 import BackToTop from './components/common/BackToTop.vue'
 </script>
 
-<style scoped>
+<style>
+html, body {
+  overflow-x: hidden;
+}
+
 #app {
   min-height: 100vh;
   display: flex;
@@ -28,15 +32,11 @@ import BackToTop from './components/common/BackToTop.vue'
 
 .main-content {
   flex: 1;
-  padding: 84px 20px 20px;
-  max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
-  box-sizing: border-box;
 }
 </style>
 
-<style>
+<style scoped>
 .page-enter-active {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
