@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <header class="header" :class="{ 'header--transparent': isTransparent }">
     <div class="container header-container">
       <router-link to="/blog/" class="logo">
         <h1>My Blog</h1>
@@ -35,38 +35,55 @@
 </template>
 
 <script setup>
+import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import ThemeToggle from './ThemeToggle.vue'
+
+const route = useRoute()
+const isTransparent = ref(false)
+
+function checkTransparent() {
+  isTransparent.value = route.path.includes('/article/')
+}
+
+watch(() => route.path, checkTransparent, { immediate: true })
 </script>
 
 <style scoped lang="scss">
 @import '../../assets/styles/variables.scss';
 
 .header {
-  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
-  box-shadow: 0 4px 20px rgba(33, 150, 243, 0.3);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--bg-primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
-  .logo h1 {
-    color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
+  &--transparent {
+    background: transparent;
+    box-shadow: none;
 
-  .nav-link {
-    color: rgba(255, 255, 255, 0.95);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-
-    &:hover,
-    &.router-link-active {
+    .logo h1 {
       color: white;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
-  }
 
-  .dropdown-arrow {
-    color: rgba(255, 255, 255, 0.9);
+    .nav-link {
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+      &:hover,
+      &.router-link-active {
+        color: white;
+      }
+    }
+
+    .dropdown-arrow {
+      color: rgba(255, 255, 255, 0.9);
+    }
   }
 }
 
@@ -82,6 +99,7 @@ import ThemeToggle from './ThemeToggle.vue'
     font-size: $font-size-xl;
     color: var(--accent-color);
     margin: 0;
+    transition: color 0.4s ease;
   }
 }
 

@@ -1,15 +1,28 @@
 <template>
   <div class="article-detail">
     <div v-if="article" class="article-container">
-      <div class="article-header">
-        <h1 class="article-title">{{ article.title }}</h1>
-        <div class="article-meta">
-          <span class="article-date">发布于 {{ formatDate(article.date) }}</span>
-          <span class="article-tags">
+      <div class="article-hero" :style="{ backgroundColor: article.heroColor || '#667eea' }">
+        <div class="hero-wave wave-animation">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="var(--bg-primary)"></path>
+          </svg>
+        </div>
+        <div class="hero-content">
+          <h1 class="article-title">{{ article.title }}</h1>
+          <div class="article-meta">
+            <span class="article-date">📅 {{ formatDate(article.date) }}</span>
+            <span class="article-category">📁 {{ article.category }}</span>
+          </div>
+          <div class="article-tags">
             <span v-for="tag in article.tags" :key="tag" class="tag">
               {{ tag }}
             </span>
-          </span>
+          </div>
+        </div>
+        <div class="hero-wave-bottom wave-animation">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="var(--bg-primary)"></path>
+          </svg>
         </div>
       </div>
       <div class="article-body">
@@ -53,7 +66,6 @@ const store = useStore()
 const article = ref(null)
 const contentRef = ref(null)
 const headings = ref([])
-const activeHeading = ref(-1)
 
 const articles = computed(() => store.articles)
 const currentIndex = computed(() => articles.value.findIndex(a => a.id === route.params.id))
@@ -97,20 +109,6 @@ function scrollToHeading(id) {
   }
 }
 
-function handleScroll() {
-  const elements = document.querySelectorAll('.article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5, .article-content h6')
-  
-  let currentIndex = -1
-  elements.forEach((el, index) => {
-    const rect = el.getBoundingClientRect()
-    if (rect.top < 150) {
-      currentIndex = index
-    }
-  })
-  
-  activeHeading.value = currentIndex
-}
-
 onMounted(async () => {
   const { loadArticles, loadArticle } = await import('../utils/markdown')
   if (store.articles.length === 0) {
@@ -121,8 +119,6 @@ onMounted(async () => {
   
   await nextTick()
   extractHeadings()
-  
-  window.addEventListener('scroll', handleScroll)
 })
 
 watch(() => route.params.id, async (newId) => {
@@ -138,7 +134,7 @@ watch(() => route.params.id, async (newId) => {
 @import '../assets/styles/variables.scss';
 
 .article-detail {
-  padding: $spacing-xl 0;
+  margin: -20px;
 }
 
 .article-container {
@@ -146,43 +142,102 @@ watch(() => route.params.id, async (newId) => {
   margin: 0 auto;
 }
 
-.article-header {
-  margin-bottom: $spacing-xl;
-  padding-bottom: $spacing-lg;
-  border-bottom: 2px solid var(--border-color);
+.article-hero {
+  position: relative;
+  padding: 120px 20px 80px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 80px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.hero-wave-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 80px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.wave-animation {
+  animation: waveMove 8s ease-in-out infinite;
+}
+
+@keyframes waveMove {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-25%);
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .article-title {
-  font-size: $font-size-xxl;
+  font-size: 2.5rem;
+  font-weight: 700;
   margin-bottom: $spacing-md;
-  color: var(--text-primary);
   line-height: 1.3;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .article-meta {
   display: flex;
-  align-items: center;
-  gap: $spacing-md;
-  color: var(--text-secondary);
+  justify-content: center;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-md;
   font-size: $font-size-sm;
+  opacity: 0.95;
 }
 
 .article-tags {
   display: flex;
+  justify-content: center;
   gap: $spacing-sm;
+  flex-wrap: wrap;
 }
 
 .tag {
-  background-color: var(--bg-secondary);
+  background-color: rgba(255, 255, 255, 0.2);
   padding: $spacing-xs $spacing-sm;
   border-radius: $border-radius;
   font-size: $font-size-sm;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .article-body {
   display: flex;
   gap: $spacing-xl;
   align-items: flex-start;
+  padding: $spacing-xl 20px;
+  background: var(--bg-primary);
+  position: relative;
+  z-index: 3;
 }
 
 .article-content {
@@ -257,8 +312,7 @@ watch(() => route.params.id, async (newId) => {
   display: flex;
   justify-content: space-between;
   margin-top: $spacing-xl;
-  padding-top: $spacing-lg;
-  border-top: 1px solid var(--border-color);
+  padding: $spacing-lg 20px $spacing-xl;
 }
 
 .nav-link {
