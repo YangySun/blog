@@ -1,56 +1,54 @@
 <template>
-  <div class="article-detail">
-    <div v-if="article">
-      <div class="article-hero" :style="{ backgroundColor: article.heroColor || '#667eea' }">
-        <div class="hero-content">
-          <h1 class="article-title">{{ article.title }}</h1>
-          <div class="article-meta">
-            <span class="article-date">📅 {{ formatDate(article.date) }}</span>
-            <span class="article-category">📁 {{ article.category }}</span>
-          </div>
-          <div class="article-tags">
-            <span v-for="tag in article.tags" :key="tag" class="tag">
-              {{ tag }}
-            </span>
-          </div>
+  <div class="article-page">
+    <div class="article-hero" :style="{ backgroundColor: article?.heroColor || '#667eea' }" v-if="article">
+      <div class="hero-content">
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="article-meta">
+          <span class="article-date">📅 {{ formatDate(article.date) }}</span>
+          <span class="article-category">📁 {{ article.category }}</span>
         </div>
-        <div class="wave-separator">
-          <svg class="wave wave-1" viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path d="M0,60 C360,120 720,0 1080,60 C1260,90 1350,90 1440,60 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.08)"/>
-          </svg>
-          <svg class="wave wave-2" viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path d="M0,80 C240,20 480,100 720,60 C960,20 1200,80 1440,40 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.15)"/>
-          </svg>
-          <svg class="wave wave-3" viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path d="M0,50 C360,100 720,20 1080,70 C1260,90 1380,70 1440,50 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.25)"/>
-          </svg>
-          <svg class="wave wave-4" viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path d="M0,70 C240,30 600,90 900,50 C1140,20 1320,60 1440,40 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.35)"/>
-          </svg>
+        <div class="article-tags">
+          <span v-for="tag in article.tags" :key="tag" class="tag">
+            {{ tag }}
+          </span>
         </div>
       </div>
-      <div class="article-container">
-        <div class="article-body">
-          <div class="article-content" ref="contentRef" v-html="article.content"></div>
-          <TableOfContents :headings="headings" @navigate="scrollToHeading" />
-        </div>
-        
-        <div class="article-navigation">
-          <router-link
-            v-if="prevArticle"
-            :to="`/blog/article/${prevArticle.id}`"
-            class="nav-link prev"
-          >
-            ← {{ prevArticle.title }}
-          </router-link>
-          <router-link
-            v-if="nextArticle"
-            :to="`/blog/article/${nextArticle.id}`"
-            class="nav-link next"
-          >
-            {{ nextArticle.title }} →
-          </router-link>
-        </div>
+      <div class="wave-separator">
+        <svg class="wave wave-1" viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path d="M0,60 C360,120 720,0 1080,60 C1260,90 1350,90 1440,60 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.08)"/>
+        </svg>
+        <svg class="wave wave-2" viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path d="M0,80 C240,20 480,100 720,60 C960,20 1200,80 1440,40 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.15)"/>
+        </svg>
+        <svg class="wave wave-3" viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path d="M0,50 C360,100 720,20 1080,70 C1260,90 1380,70 1440,50 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.25)"/>
+        </svg>
+        <svg class="wave wave-4" viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path d="M0,70 C240,30 600,90 900,50 C1140,20 1320,60 1440,40 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.35)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="article-container" v-if="article">
+      <div class="article-body">
+        <div class="article-content" ref="contentRef" v-html="article.content"></div>
+        <TableOfContents :headings="headings" @navigate="scrollToHeading" />
+      </div>
+      
+      <div class="article-navigation">
+        <router-link
+          v-if="prevArticle"
+          :to="`/blog/article/${prevArticle.id}`"
+          class="nav-link prev"
+        >
+          ← {{ prevArticle.title }}
+        </router-link>
+        <router-link
+          v-if="nextArticle"
+          :to="`/blog/article/${nextArticle.id}`"
+          class="nav-link next"
+        >
+          {{ nextArticle.title }} →
+        </router-link>
       </div>
     </div>
     <div v-else class="loading">
@@ -139,11 +137,7 @@ watch(() => route.params.id, async (newId) => {
 <style scoped lang="scss">
 @import '../assets/styles/variables.scss';
 
-.article-detail {
-  margin: -64px 0 0;
-}
-
-.article-container {
+.article-page {
   width: 100%;
 }
 
@@ -155,6 +149,7 @@ watch(() => route.params.id, async (newId) => {
   text-align: center;
   overflow: hidden;
   min-height: 300px;
+  width: 100%;
 }
 
 .hero-content {
@@ -251,6 +246,11 @@ watch(() => route.params.id, async (newId) => {
   font-size: $font-size-sm;
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.article-container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .article-body {
