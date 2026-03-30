@@ -13,13 +13,16 @@
           </router-link>
           <div class="dropdown-menu">
             <router-link to="/blog/articles" class="dropdown-item">
-              📚 文章列表
+              <span class="item-icon">☰</span>
+              <span>文章列表</span>
             </router-link>
             <router-link to="/blog/categories" class="dropdown-item">
-              📁 分类列表
+              <span class="item-icon">▣</span>
+              <span>分类列表</span>
             </router-link>
             <router-link to="/blog/tags" class="dropdown-item">
-              🏷️ 标签列表
+              <span class="item-icon">⚿</span>
+              <span>标签列表</span>
             </router-link>
           </div>
         </div>
@@ -39,23 +42,26 @@ import ThemeToggle from './ThemeToggle.vue'
 @import '../../assets/styles/variables.scss';
 
 .header {
-  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  box-shadow: 0 4px 20px rgba(33, 150, 243, 0.3);
   position: sticky;
   top: 0;
   z-index: 100;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   .logo h1 {
     color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   .nav-link {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
     &:hover,
     &.router-link-active {
       color: white;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
   }
 
@@ -155,10 +161,22 @@ import ThemeToggle from './ThemeToggle.vue'
   text-align: center;
   border-radius: $border-radius;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  .item-icon {
+    font-size: 16px;
+    opacity: 0.7;
+  }
 
   &:hover {
     background: var(--bg-secondary);
     color: var(--accent-color);
+
+    .item-icon {
+      opacity: 1;
+    }
   }
 }
 
