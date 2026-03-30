@@ -1,11 +1,13 @@
 <template>
   <header class="header" :class="{ 'header--article': isArticlePage, 'header--scrolled': isScrolled }">
-    <div class="container header-container">
+    <div v-if="isArticlePage && isScrolled" class="article-title-bar">
+      <h1 class="article-title-center">{{ currentArticleTitle }}</h1>
+    </div>
+    <div v-else class="container header-container">
       <router-link to="/blog/" class="logo">
-        <h1 v-if="!isArticlePage || !isScrolled">My Blog</h1>
-        <h1 v-else class="article-title-header">{{ currentArticleTitle }}</h1>
+        <h1>My Blog</h1>
       </router-link>
-      <nav class="nav" v-if="!isArticlePage || !isScrolled">
+      <nav class="nav">
         <router-link to="/blog/" class="nav-link">首页</router-link>
         <div class="dropdown">
           <router-link to="/blog/articles" class="nav-link dropdown-toggle">
@@ -30,7 +32,7 @@
         <router-link to="/blog/about" class="nav-link">关于</router-link>
         <router-link to="/blog/links" class="nav-link">友链</router-link>
       </nav>
-      <ThemeToggle v-if="!isArticlePage || !isScrolled" />
+      <ThemeToggle />
     </div>
   </header>
 </template>
@@ -87,56 +89,11 @@ onUnmounted(() => {
   right: 0;
   z-index: 100;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: white;
+  background: var(--bg-primary);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
-  &--article {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-
-    .logo h1 {
-      color: white;
-    }
-
-    .nav-link {
-      color: rgba(255, 255, 255, 0.9);
-
-      &:hover,
-      &.router-link-active {
-        color: white;
-      }
-    }
-
-    .dropdown-arrow {
-      color: rgba(255, 255, 255, 0.9);
-    }
-  }
-
-  &--scrolled {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-
-    .logo h1,
-    .article-title-header {
-      color: var(--text-primary);
-    }
-
-    .nav-link {
-      color: var(--text-primary);
-
-      &:hover,
-      &.router-link-active {
-        color: var(--accent-color);
-      }
-    }
-
-    .dropdown-arrow {
-      color: var(--text-secondary);
-    }
-  }
 }
 
-.header-container {
+.container.header-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -149,16 +106,6 @@ onUnmounted(() => {
     color: var(--accent-color);
     margin: 0;
     transition: all 0.4s ease;
-  }
-
-  .article-title-header {
-    font-size: $font-size-lg;
-    font-weight: 600;
-    max-width: 600px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: center;
   }
 }
 
@@ -256,6 +203,27 @@ onUnmounted(() => {
       opacity: 1;
     }
   }
+}
+
+.article-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  background: var(--bg-primary);
+}
+
+.article-title-center {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: var(--text-primary);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
