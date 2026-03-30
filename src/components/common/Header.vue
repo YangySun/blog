@@ -116,20 +116,25 @@ import ThemeToggle from './ThemeToggle.vue'
   border: 1px solid var(--border-color);
   border-radius: $border-radius;
   box-shadow: $shadow-hover;
-  min-width: 180px;
-  padding: $spacing-sm 0;
+  min-width: 400px;
+  padding: $spacing-sm;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-xs;
 }
 
 .dropdown-item {
-  display: block;
+  flex: 1;
   padding: $spacing-sm $spacing-md;
   color: var(--text-primary);
   text-decoration: none;
   transition: $transition;
   font-size: $font-size-sm;
+  text-align: center;
+  border-radius: $border-radius;
 
   &:hover {
     background: var(--bg-secondary);
