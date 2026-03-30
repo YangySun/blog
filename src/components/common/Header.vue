@@ -6,7 +6,23 @@
       </router-link>
       <nav class="nav">
         <router-link to="/blog/" class="nav-link">首页</router-link>
-        <router-link to="/blog/articles" class="nav-link">文章</router-link>
+        <div class="dropdown">
+          <router-link to="/blog/articles" class="nav-link dropdown-toggle">
+            文库
+            <span class="dropdown-arrow">▼</span>
+          </router-link>
+          <div class="dropdown-menu">
+            <router-link to="/blog/articles" class="dropdown-item">
+              📚 文章列表
+            </router-link>
+            <router-link to="/blog/categories" class="dropdown-item">
+              📁 分类
+            </router-link>
+            <router-link to="/blog/tags" class="dropdown-item">
+              🏷️ 标签
+            </router-link>
+          </div>
+        </div>
         <router-link to="/blog/about" class="nav-link">关于</router-link>
         <router-link to="/blog/links" class="nav-link">友链</router-link>
       </nav>
@@ -24,7 +40,7 @@ import ThemeToggle from './ThemeToggle.vue'
 
 .header {
   background-color: var(--bg-primary);
-  box-shadow: var(--shadow);
+  box-shadow: $shadow;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -48,6 +64,7 @@ import ThemeToggle from './ThemeToggle.vue'
 
 .nav {
   display: flex;
+  align-items: center;
   gap: $spacing-lg;
 }
 
@@ -55,9 +72,67 @@ import ThemeToggle from './ThemeToggle.vue'
   color: var(--text-primary);
   font-weight: 500;
   transition: $transition;
+  text-decoration: none;
 
   &:hover,
   &.router-link-active {
+    color: var(--accent-color);
+  }
+}
+
+.dropdown {
+  position: relative;
+
+  &:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  cursor: pointer;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+}
+
+.dropdown:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: $border-radius;
+  box-shadow: $shadow-hover;
+  min-width: 180px;
+  padding: $spacing-sm 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.dropdown-item {
+  display: block;
+  padding: $spacing-sm $spacing-md;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: $transition;
+  font-size: $font-size-sm;
+
+  &:hover {
+    background: var(--bg-secondary);
     color: var(--accent-color);
   }
 }

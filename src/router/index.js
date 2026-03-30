@@ -17,6 +17,26 @@ const routes = [
     component: () => import('../views/ArticleDetail.vue')
   },
   {
+    path: '/blog/categories',
+    name: 'Categories',
+    component: () => import('../views/Categories.vue')
+  },
+  {
+    path: '/blog/category/:name',
+    name: 'CategoryArticles',
+    component: () => import('../views/CategoryArticles.vue')
+  },
+  {
+    path: '/blog/tags',
+    name: 'Tags',
+    component: () => import('../views/Tags.vue')
+  },
+  {
+    path: '/blog/tag/:name',
+    name: 'TagArticles',
+    component: () => import('../views/TagArticles.vue')
+  },
+  {
     path: '/blog/about',
     name: 'About',
     component: () => import('../views/About.vue')
