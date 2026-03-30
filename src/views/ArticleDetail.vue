@@ -1,18 +1,20 @@
 <template>
   <div class="article-detail">
     <div v-if="article" class="article-container">
-      <h1 class="article-title">{{ article.title }}</h1>
-      <div class="article-meta">
-        <span class="article-date">{{ formatDate(article.date) }}</span>
-        <span class="article-tags">
-          <span v-for="tag in article.tags" :key="tag" class="tag">
-            {{ tag }}
+      <div class="article-header">
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="article-meta">
+          <span class="article-date">发布于 {{ formatDate(article.date) }}</span>
+          <span class="article-tags">
+            <span v-for="tag in article.tags" :key="tag" class="tag">
+              {{ tag }}
+            </span>
           </span>
-        </span>
+        </div>
       </div>
-      <div class="article-content-wrapper">
-        <TableOfContents :content="article.content" />
+      <div class="article-body">
         <div class="article-content" v-html="article.content"></div>
+        <TableOfContents :content="article.content" />
       </div>
       
       <div class="article-navigation">
@@ -78,23 +80,27 @@ onMounted(async () => {
 }
 
 .article-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  display: flex;
-  gap: $spacing-xl;
+}
+
+.article-header {
+  margin-bottom: $spacing-xl;
+  padding-bottom: $spacing-lg;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .article-title {
   font-size: $font-size-xxl;
   margin-bottom: $spacing-md;
   color: var(--text-primary);
+  line-height: 1.3;
 }
 
 .article-meta {
   display: flex;
   align-items: center;
   gap: $spacing-md;
-  margin-bottom: $spacing-xl;
   color: var(--text-secondary);
   font-size: $font-size-sm;
 }
@@ -111,19 +117,18 @@ onMounted(async () => {
   font-size: $font-size-sm;
 }
 
-.article-content-wrapper {
+.article-body {
   display: flex;
   gap: $spacing-xl;
-  position: relative;
-  flex-direction: row-reverse;
+  align-items: flex-start;
 }
 
 .article-content {
   flex: 1;
+  min-width: 0;
   font-size: $font-size-md;
   line-height: 1.8;
   color: var(--text-primary);
-  min-width: 0;
 
   :deep(h2) {
     font-size: $font-size-xl;
