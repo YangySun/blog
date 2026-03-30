@@ -16,10 +16,10 @@
               📚 文章列表
             </router-link>
             <router-link to="/blog/categories" class="dropdown-item">
-              📁 分类
+              📁 分类列表
             </router-link>
             <router-link to="/blog/tags" class="dropdown-item">
-              🏷️ 标签
+              🏷️ 标签列表
             </router-link>
           </div>
         </div>
@@ -110,13 +110,14 @@ import ThemeToggle from './ThemeToggle.vue'
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  left: 0;
-  transform: translateY(10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: $border-radius;
   box-shadow: $shadow-hover;
   width: max-content;
+  min-width: 100%;
   padding: $spacing-xs;
   opacity: 0;
   visibility: hidden;
