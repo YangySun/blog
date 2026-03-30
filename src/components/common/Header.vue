@@ -39,12 +39,29 @@ import ThemeToggle from './ThemeToggle.vue'
 @import '../../assets/styles/variables.scss';
 
 .header {
-  background-color: var(--bg-primary);
-  box-shadow: $shadow;
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
   position: sticky;
   top: 0;
   z-index: 100;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+
+  .logo h1 {
+    color: white;
+  }
+
+  .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+
+    &:hover,
+    &.router-link-active {
+      color: white;
+    }
+  }
+
+  .dropdown-arrow {
+    color: rgba(255, 255, 255, 0.9);
+  }
 }
 
 .header-container {
