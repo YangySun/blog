@@ -48,7 +48,7 @@ function parseFrontmatter(content) {
 }
 
 export async function loadArticles() {
-  const articleModules = import.meta.glob('/src/data/articles/*.md', { as: 'raw' })
+  const articleModules = import.meta.glob('/src/data/articles/*.md', { query: '?raw', import: 'default' })
   const articles = []
   
   for (const path in articleModules) {
@@ -71,7 +71,7 @@ export async function loadArticles() {
 }
 
 export async function loadArticle(id) {
-  const articleModules = import.meta.glob('/src/data/articles/*.md', { as: 'raw' })
+  const articleModules = import.meta.glob('/src/data/articles/*.md', { query: '?raw', import: 'default' })
   const path = `/src/data/articles/${id}.md`
   
   if (!articleModules[path]) {

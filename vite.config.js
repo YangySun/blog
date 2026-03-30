@@ -17,5 +17,12 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets'
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        silenceDeprecations: ['legacy-js-api', 'import', 'global-builtin', 'color-functions']
+      }
+    }
   }
 })

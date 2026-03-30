@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import './variables.scss';
 
 :root {
@@ -108,7 +109,7 @@ button {
     color: $text-primary;
 
     &:hover {
-      background-color: darken($bg-secondary, 5%);
+      background-color: color.adjust($bg-secondary, $lightness: -5%);
     }
   }
 }
