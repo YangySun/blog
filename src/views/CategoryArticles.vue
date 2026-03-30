@@ -109,9 +109,9 @@ onMounted(async () => {
 }
 
 .articles-list {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-lg;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: $spacing-xl;
 }
 
 .no-results {

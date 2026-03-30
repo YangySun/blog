@@ -1,10 +1,11 @@
 <template>
-  <header class="header" :class="{ 'header--article-scrolled': isArticleScrolled }">
+  <header class="header" :class="{ 'header--article': isArticlePage, 'header--scrolled': isScrolled }">
     <div class="container header-container">
       <router-link to="/blog/" class="logo">
-        <h1>My Blog</h1>
+        <h1 v-if="!isArticlePage || !isScrolled">My Blog</h1>
+        <h1 v-else class="article-title-header">{{ currentArticleTitle }}</h1>
       </router-link>
-      <nav class="nav">
+      <nav class="nav" v-if="!isArticlePage || !isScrolled">
         <router-link to="/blog/" class="nav-link">首页</router-link>
         <div class="dropdown">
           <router-link to="/blog/articles" class="nav-link dropdown-toggle">
@@ -29,13 +30,8 @@
         <router-link to="/blog/about" class="nav-link">关于</router-link>
         <router-link to="/blog/links" class="nav-link">友链</router-link>
       </nav>
-      <ThemeToggle />
+      <ThemeToggle v-if="!isArticlePage || !isScrolled" />
     </div>
-    <transition name="slide-fade">
-      <div v-if="isArticleScrolled" class="article-title-bar">
-        <span class="article-title">{{ currentArticleTitle }}</span>
-      </div>
-    </transition>
   </header>
 </template>
 
@@ -45,20 +41,24 @@ import { useRoute } from 'vue-router'
 import ThemeToggle from './ThemeToggle.vue'
 
 const route = useRoute()
-const isArticleScrolled = ref(false)
+const isScrolled = ref(false)
+const isArticlePage = ref(false)
 const currentArticleTitle = ref('')
 
 function handleScroll() {
-  const isArticlePage = route.path.includes('/article/')
-  isArticleScrolled.value = isArticlePage && window.scrollY > 100
+  if (isArticlePage.value) {
+    isScrolled.value = window.scrollY > 100
+  }
 }
 
 watch(() => route.params.id, async (newId) => {
   if (newId) {
+    isArticlePage.value = true
     const { loadArticle } = await import('../../utils/markdown')
     const article = await loadArticle(newId)
     currentArticleTitle.value = article?.title || ''
   } else {
+    isArticlePage.value = false
     currentArticleTitle.value = ''
   }
 }, { immediate: true })
@@ -89,6 +89,51 @@ onUnmounted(() => {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  &--article {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    .logo h1 {
+      color: white;
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.9);
+
+      &:hover,
+      &.router-link-active {
+        color: white;
+      }
+    }
+
+    .dropdown-arrow {
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  &--scrolled {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+
+    .logo h1,
+    .article-title-header {
+      color: var(--text-primary);
+    }
+
+    .nav-link {
+      color: var(--text-primary);
+
+      &:hover,
+      &.router-link-active {
+        color: var(--accent-color);
+      }
+    }
+
+    .dropdown-arrow {
+      color: var(--text-secondary);
+    }
+  }
 }
 
 .header-container {
@@ -103,7 +148,17 @@ onUnmounted(() => {
     font-size: $font-size-xl;
     color: var(--accent-color);
     margin: 0;
-    transition: color 0.4s ease;
+    transition: all 0.4s ease;
+  }
+
+  .article-title-header {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    max-width: 600px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
   }
 }
 
@@ -201,44 +256,6 @@ onUnmounted(() => {
       opacity: 1;
     }
   }
-}
-
-.article-title-bar {
-  position: absolute;
-  top: 64px;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  padding: $spacing-sm $spacing-lg;
-  text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 99;
-}
-
-.article-title {
-  font-size: $font-size-md;
-  color: var(--text-primary);
-  font-weight: 600;
-  max-width: 800px;
-  margin: 0 auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.slide-fade-enter-active {
-  transition: all 0.3s ease-out;
-}
-
-.slide-fade-leave-active {
-  transition: all 0.2s ease-in;
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateY(-100%);
-  opacity: 0;
 }
 
 @media (max-width: 768px) {
