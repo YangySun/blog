@@ -14,6 +14,20 @@
             </span>
           </div>
         </div>
+        <div class="wave-separator">
+          <svg class="wave wave-1" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,60 C360,120 720,0 1080,60 C1260,90 1350,90 1440,60 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.08)"/>
+          </svg>
+          <svg class="wave wave-2" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,80 C240,20 480,100 720,60 C960,20 1200,80 1440,40 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.15)"/>
+          </svg>
+          <svg class="wave wave-3" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,50 C360,100 720,20 1080,70 C1260,90 1380,70 1440,50 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.25)"/>
+          </svg>
+          <svg class="wave wave-4" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,70 C240,30 600,90 900,50 C1140,20 1320,60 1440,40 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.35)"/>
+          </svg>
+        </div>
       </div>
       <div class="article-body">
         <div class="article-content" ref="contentRef" v-html="article.content"></div>
@@ -133,13 +147,14 @@ watch(() => route.params.id, async (newId) => {
 
 .article-hero {
   position: relative;
-  padding: 120px 20px 60px;
+  padding: 120px 20px 80px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   text-align: center;
   margin: 0;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
+  overflow: hidden;
 }
 
 .hero-content {
@@ -147,6 +162,62 @@ watch(() => route.params.id, async (newId) => {
   z-index: 2;
   max-width: 900px;
   margin: 0 auto;
+}
+
+.wave-separator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+}
+
+.wave-1 {
+  opacity: 0.08;
+  animation: waveMove1 10s ease-in-out infinite;
+}
+
+.wave-2 {
+  opacity: 0.15;
+  animation: waveMove2 12s ease-in-out infinite;
+}
+
+.wave-3 {
+  opacity: 0.25;
+  animation: waveMove3 8s ease-in-out infinite;
+}
+
+.wave-4 {
+  opacity: 0.35;
+  animation: waveMove4 14s ease-in-out infinite;
+}
+
+@keyframes waveMove1 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-25%); }
+}
+
+@keyframes waveMove2 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-30%); }
+}
+
+@keyframes waveMove3 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-20%); }
+}
+
+@keyframes waveMove4 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-35%); }
 }
 
 .article-title {
