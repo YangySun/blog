@@ -144,7 +144,7 @@ watch(() => route.params.id, async (newId) => {
 
 .article-hero {
   position: relative;
-  padding: 120px 20px 80px;
+  padding: 120px 20px 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   text-align: center;
@@ -153,7 +153,7 @@ watch(() => route.params.id, async (newId) => {
 
 .hero-wave {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 200%;
   height: 80px;
@@ -165,16 +165,7 @@ watch(() => route.params.id, async (newId) => {
 }
 
 .hero-wave-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 200%;
-  height: 80px;
-
-  svg {
-    width: 100%;
-    height: 100%;
-  }
+  display: none;
 }
 
 .wave-animation {

@@ -1,8 +1,9 @@
 <template>
-  <header class="header" :class="{ 'header--transparent': isTransparent }">
+  <header class="header" :class="{ 'header--scrolled': isScrolled }">
     <div class="container header-container">
       <router-link to="/blog/" class="logo">
-        <h1>My Blog</h1>
+        <h1 v-if="!isScrolled || !currentArticleTitle">My Blog</h1>
+        <h1 v-else class="article-title-scroll">{{ currentArticleTitle }}</h1>
       </router-link>
       <nav class="nav">
         <router-link to="/blog/" class="nav-link">首页</router-link>
@@ -40,13 +41,31 @@ import { useRoute } from 'vue-router'
 import ThemeToggle from './ThemeToggle.vue'
 
 const route = useRoute()
-const isTransparent = ref(false)
+const isScrolled = ref(false)
+const currentArticleTitle = ref('')
 
-function checkTransparent() {
-  isTransparent.value = route.path.includes('/article/')
+function handleScroll() {
+  isScrolled.value = window.scrollY > 100
 }
 
-watch(() => route.path, checkTransparent, { immediate: true })
+watch(() => route.params.id, async (newId) => {
+  if (newId) {
+    const { loadArticle } = await import('../../utils/markdown')
+    const article = await loadArticle(newId)
+    currentArticleTitle.value = article?.title || ''
+  } else {
+    currentArticleTitle.value = ''
+  }
+}, { immediate: true })
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+  handleScroll()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <style scoped lang="scss">
@@ -59,30 +78,17 @@ watch(() => route.path, checkTransparent, { immediate: true })
   right: 0;
   z-index: 100;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: var(--bg-primary);
+  background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
-  &--transparent {
-    background: transparent;
-    box-shadow: none;
+  &--scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
 
     .logo h1 {
-      color: white;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .nav-link {
-      color: rgba(255, 255, 255, 0.95);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-
-      &:hover,
-      &.router-link-active {
-        color: white;
-      }
-    }
-
-    .dropdown-arrow {
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--text-primary);
+      font-size: $font-size-md;
     }
   }
 }
@@ -97,9 +103,18 @@ watch(() => route.path, checkTransparent, { immediate: true })
 .logo {
   h1 {
     font-size: $font-size-xl;
-    color: var(--accent-color);
+    color: white;
     margin: 0;
-    transition: color 0.4s ease;
+    transition: all 0.4s ease;
+  }
+
+  .article-title-scroll {
+    font-size: $font-size-md;
+    font-weight: 600;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
@@ -110,14 +125,25 @@ watch(() => route.path, checkTransparent, { immediate: true })
 }
 
 .nav-link {
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.95);
   font-weight: 500;
   transition: $transition;
   text-decoration: none;
 
   &:hover,
   &.router-link-active {
-    color: var(--accent-color);
+    color: white;
+  }
+}
+
+.header--scrolled {
+  .nav-link {
+    color: var(--text-primary);
+
+    &:hover,
+    &.router-link-active {
+      color: var(--accent-color);
+    }
   }
 }
 
@@ -144,6 +170,13 @@ watch(() => route.path, checkTransparent, { immediate: true })
 .dropdown-arrow {
   font-size: 10px;
   transition: transform 0.3s ease;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.header--scrolled {
+  .dropdown-arrow {
+    color: var(--text-secondary);
+  }
 }
 
 .dropdown:hover .dropdown-arrow {
