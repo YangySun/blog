@@ -1,6 +1,6 @@
 <template>
   <div class="article-detail">
-    <div v-if="article" class="article-container">
+    <div v-if="article">
       <div class="article-hero" :style="{ backgroundColor: article.heroColor || '#667eea' }">
         <div class="hero-content">
           <h1 class="article-title">{{ article.title }}</h1>
@@ -29,26 +29,28 @@
           </svg>
         </div>
       </div>
-      <div class="article-body">
-        <div class="article-content" ref="contentRef" v-html="article.content"></div>
-        <TableOfContents :headings="headings" @navigate="scrollToHeading" />
-      </div>
-      
-      <div class="article-navigation">
-        <router-link
-          v-if="prevArticle"
-          :to="`/blog/article/${prevArticle.id}`"
-          class="nav-link prev"
-        >
-          ← {{ prevArticle.title }}
-        </router-link>
-        <router-link
-          v-if="nextArticle"
-          :to="`/blog/article/${nextArticle.id}`"
-          class="nav-link next"
-        >
-          {{ nextArticle.title }} →
-        </router-link>
+      <div class="article-container">
+        <div class="article-body">
+          <div class="article-content" ref="contentRef" v-html="article.content"></div>
+          <TableOfContents :headings="headings" @navigate="scrollToHeading" />
+        </div>
+        
+        <div class="article-navigation">
+          <router-link
+            v-if="prevArticle"
+            :to="`/blog/article/${prevArticle.id}`"
+            class="nav-link prev"
+          >
+            ← {{ prevArticle.title }}
+          </router-link>
+          <router-link
+            v-if="nextArticle"
+            :to="`/blog/article/${nextArticle.id}`"
+            class="nav-link next"
+          >
+            {{ nextArticle.title }} →
+          </router-link>
+        </div>
       </div>
     </div>
     <div v-else class="loading">
