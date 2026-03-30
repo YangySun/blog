@@ -2,6 +2,7 @@
 title: 欢迎来到我的博客
 date: 2024-01-01
 tags: [博客, 欢迎]
+category: 博客介绍
 description: 这是我的第一篇博客文章，欢迎大家访问！
 ---
 

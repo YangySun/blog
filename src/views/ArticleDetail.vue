@@ -10,7 +10,10 @@
           </span>
         </span>
       </div>
-      <div class="article-content" v-html="article.content"></div>
+      <div class="article-content-wrapper">
+        <TableOfContents :content="article.content" />
+        <div class="article-content" v-html="article.content"></div>
+      </div>
       
       <div class="article-navigation">
         <router-link
@@ -40,6 +43,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '../store'
 import { formatDate } from '../utils/date'
+import TableOfContents from '../components/article/TableOfContents.vue'
 
 const route = useRoute()
 const store = useStore()
@@ -105,7 +109,14 @@ onMounted(async () => {
   font-size: $font-size-sm;
 }
 
+.article-content-wrapper {
+  display: flex;
+  gap: $spacing-xl;
+  position: relative;
+}
+
 .article-content {
+  flex: 1;
   font-size: $font-size-md;
   line-height: 1.8;
   color: var(--text-primary);

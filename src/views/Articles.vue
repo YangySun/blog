@@ -2,6 +2,18 @@
   <div class="articles-page">
     <h1 class="page-title">文章列表</h1>
     
+    <CategoryFilter
+      :categories="allCategories"
+      :selected-category="selectedCategory"
+      @select="setSelectedCategory"
+    />
+    
+    <TagFilter
+      :tags="allTags"
+      :selected-tag="selectedTag"
+      @select="setSelectedTag"
+    />
+    
     <div class="search-bar">
       <input
         v-model="searchQuery"
@@ -13,9 +25,11 @@
 
     <div class="articles-grid">
       <ArticleCard
-        v-for="article in filteredArticles"
+        v-for="(article, index) in filteredArticles"
         :key="article.id"
         :article="article"
+        class="scale-animation"
+        :style="{ animationDelay: `${index * 0.1}s` }"
       />
     </div>
 
@@ -29,18 +43,21 @@
 import { ref, computed, onMounted } from 'vue'
 import { useStore } from '../store'
 import ArticleCard from '../components/article/ArticleCard.vue'
+import CategoryFilter from '../components/article/CategoryFilter.vue'
+import TagFilter from '../components/article/TagFilter.vue'
 
 const store = useStore()
 const searchQuery = ref('')
 
-const filteredArticles = computed(() => {
-  if (!searchQuery.value) return store.articles
-  const query = searchQuery.value.toLowerCase()
-  return store.articles.filter(article =>
-    article.title.toLowerCase().includes(query) ||
-    article.description.toLowerCase().includes(query)
-  )
-})
+const { allCategories, allTags, filteredArticles } = store
+
+function setSelectedCategory(category) {
+  store.setSelectedCategory(category)
+}
+
+function setSelectedTag(tag) {
+  store.setSelectedTag(tag)
+}
 
 onMounted(async () => {
   const { loadArticles } = await import('../utils/markdown')
@@ -60,10 +77,19 @@ onMounted(async () => {
   font-size: $font-size-xxl;
   margin-bottom: $spacing-lg;
   color: var(--text-primary);
+  text-align: center;
+}
+
+.filter-section {
+  display: flex;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  flex-wrap: wrap;
 }
 
 .search-bar {
-  margin-bottom: $spacing-lg;
+  flex: 1;
+  min-width: 300px;
 }
 
 .search-input {
@@ -93,5 +119,6 @@ onMounted(async () => {
   text-align: center;
   padding: $spacing-xl;
   color: var(--text-secondary);
+  font-size: $font-size-lg;
 }
 </style>

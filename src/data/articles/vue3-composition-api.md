@@ -2,6 +2,7 @@
 title: Vue 3 Composition API 入门指南
 date: 2024-01-15
 tags: [Vue.js, JavaScript, 前端]
+category: 前端开发
 description: 学习Vue 3的Composition API，了解如何使用setup、ref、reactive等核心概念。
 ---
 

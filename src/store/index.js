@@ -5,6 +5,8 @@ export const useStore = defineStore('main', () => {
   const theme = ref(localStorage.getItem('theme') || 'light')
   const articles = ref([])
   const searchQuery = ref('')
+  const selectedCategory = ref('all')
+  const selectedTag = ref('all')
 
   const isDark = computed(() => theme.value === 'dark')
 
@@ -22,13 +24,44 @@ export const useStore = defineStore('main', () => {
     searchQuery.value = query
   }
 
+  function setSelectedCategory(category) {
+    selectedCategory.value = category
+  }
+
+  function setSelectedTag(tag) {
+    selectedTag.value = tag
+  }
+
+  const allCategories = computed(() => {
+    const categories = new Set(articles.value.map(a => a.category).filter(Boolean))
+    return ['all', ...Array.from(categories)]
+  })
+
+  const allTags = computed(() => {
+    const tags = new Set(articles.value.flatMap(a => a.tags || []))
+    return ['all', ...Array.from(tags)]
+  })
+
   const filteredArticles = computed(() => {
-    if (!searchQuery.value) return articles.value
-    const query = searchQuery.value.toLowerCase()
-    return articles.value.filter(article =>
-      article.title.toLowerCase().includes(query) ||
-      article.content.toLowerCase().includes(query)
-    )
+    let filtered = articles.value
+
+    if (selectedCategory.value !== 'all') {
+      filtered = filtered.filter(article => article.category === selectedCategory.value)
+    }
+
+    if (selectedTag.value !== 'all') {
+      filtered = filtered.filter(article => article.tags && article.tags.includes(selectedTag.value))
+    }
+
+    if (searchQuery.value) {
+      const query = searchQuery.value.toLowerCase()
+      filtered = filtered.filter(article =>
+        article.title.toLowerCase().includes(query) ||
+        article.content.toLowerCase().includes(query)
+      )
+    }
+
+    return filtered
   })
 
   return {
@@ -36,9 +69,15 @@ export const useStore = defineStore('main', () => {
     isDark,
     articles,
     searchQuery,
+    selectedCategory,
+    selectedTag,
+    allCategories,
+    allTags,
     filteredArticles,
     toggleTheme,
     setArticles,
-    setSearchQuery
+    setSearchQuery,
+    setSelectedCategory,
+    setSelectedTag
   }
 })
