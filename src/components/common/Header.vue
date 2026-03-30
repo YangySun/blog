@@ -118,38 +118,24 @@ onUnmounted(() => {
   }
 
   &--scrolled {
-    background: rgba(102, 126, 234, 0.95);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(102, 126, 234, 0.3);
+    background: var(--bg-primary);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
     .logo h1 {
-      color: white;
+      color: var(--accent-color);
     }
 
     .nav-link {
-      color: rgba(255, 255, 255, 0.95);
+      color: var(--text-primary);
 
       &:hover,
       &.router-link-active {
-        color: white;
+        color: var(--accent-color);
       }
     }
 
     .dropdown-arrow {
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    .theme-toggle {
-      background-color: rgba(255, 255, 255, 0.2);
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.3);
-      }
-
-      .sun-icon,
-      .moon-icon {
-        color: white;
-      }
+      color: var(--text-secondary);
     }
   }
 }
