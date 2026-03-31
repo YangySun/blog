@@ -140,10 +140,14 @@ watch(() => route.params.id, async (newId) => {
 .article-page {
   width: 100%;
   overflow-x: hidden;
+  position: relative;
 }
 
 .article-hero {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   padding: 140px 20px 80px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -151,6 +155,7 @@ watch(() => route.params.id, async (newId) => {
   overflow: hidden;
   min-height: 300px;
   width: 100%;
+  z-index: 0;
 }
 
 .hero-content {
@@ -252,6 +257,8 @@ watch(() => route.params.id, async (newId) => {
 .article-container {
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .article-body {
@@ -261,7 +268,8 @@ watch(() => route.params.id, async (newId) => {
   padding: $spacing-xl 20px;
   background: var(--bg-primary);
   position: relative;
-  z-index: 3;
+  z-index: 1;
+  min-height: 500px;
 }
 
 .article-content {

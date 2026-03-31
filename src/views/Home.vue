@@ -1,11 +1,11 @@
 <template>
-  <div class="home">
+  <div class="page-wrapper">
     <section class="hero shine-effect">
       <h1 class="hero-title float-animation">欢迎来到我的博客</h1>
       <p class="hero-subtitle">分享技术，记录生活</p>
     </section>
 
-    <section class="articles-section">
+    <section class="articles-section page-container">
       <div class="section-tabs">
         <button
           v-for="category in categories"
@@ -68,13 +68,23 @@ onMounted(async () => {
 <style scoped lang="scss">
 @import '../assets/styles/variables.scss';
 
+.page-wrapper {
+  width: 100%;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 .home {
   padding: $spacing-xl 0;
 }
 
 .hero {
   text-align: center;
-  padding: $spacing-xxl 0;
+  padding: $spacing-xxl 20px;
   background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
   border-radius: $border-radius;
   margin-bottom: $spacing-xl;
