@@ -1,31 +1,39 @@
 <template>
   <div id="app">
     <Header />
-    <router-view v-slot="{ Component }">
-      <transition name="page" mode="out-in">
-        <component :is="Component" />
-      </transition>
-    </router-view>
+    <main class="main-content">
+      <router-view v-slot="{ Component }">
+        <transition name="page" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </main>
     <Footer />
-    <BackToTop />
   </div>
 </template>
 
 <script setup>
 import Header from './components/common/Header.vue'
 import Footer from './components/common/Footer.vue'
-import BackToTop from './components/common/BackToTop.vue'
 </script>
 
 <style>
 html, body {
   overflow-x: hidden;
+  background-color: #f7f9fe;
 }
 
 #app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #f7f9fe;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 64px;
+  background-color: #f7f9fe;
 }
 </style>
 

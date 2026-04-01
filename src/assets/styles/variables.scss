@@ -23,3 +23,51 @@ $font-size-xxl: 32px;
 
 $border-radius: 8px;
 $transition: all 0.3s ease;
+
+@mixin page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+@mixin page-title {
+  font-size: $font-size-xxl;
+  margin-bottom: $spacing-xl;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+@mixin card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: $spacing-lg;
+}
+
+@mixin tab-btn {
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid var(--border-color);
+  border-radius: $border-radius;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent-color);
+  }
+
+  &.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+  }
+}
+
+@mixin no-results {
+  text-align: center;
+  padding: $spacing-xl;
+  color: var(--text-secondary);
+  font-size: $font-size-lg;
+}

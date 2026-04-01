@@ -5,11 +5,11 @@
       <li
         v-for="(heading, index) in headings"
         :key="index"
-        :class="['toc-item', { active: activeHeading === index }]"
+        :class="['toc-item', { active: activeIndex === index }]"
       >
         <a
           href="javascript:void(0)"
-          @click.prevent="$emit('navigate', heading.id)"
+          @click="scrollToHeading(heading.id)"
           :style="{ paddingLeft: `${(heading.level - 1) * 16}px` }"
         >
           {{ heading.text }}
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 const props = defineProps({
   headings: {
@@ -29,55 +29,78 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['navigate'])
+const activeIndex = ref(-1)
 
-const activeHeading = ref(-1)
+function scrollToHeading(id) {
+  const element = document.getElementById(id)
+  if (element) {
+    const headerOffset = 80
+    const elementPosition = element.getBoundingClientRect().top
+    const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    })
+  }
+}
 
 function updateActiveHeading() {
-  const elements = document.querySelectorAll('.article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5, .article-content h6')
-  
-  let currentIndex = -1
+  if (!props.headings || props.headings.length === 0) return
+
+  const headingIds = props.headings.map(h => h.id)
+  const elements = headingIds.map(id => document.getElementById(id)).filter(Boolean)
+
+  let current = -1
+  const scrollY = window.scrollY
+  const windowHeight = window.innerHeight
+
   elements.forEach((el, index) => {
     const rect = el.getBoundingClientRect()
-    if (rect.top < 120) {
-      currentIndex = index
+    const offsetTop = rect.top + scrollY
+
+    if (scrollY >= offsetTop - 150) {
+      current = index
     }
   })
-  
-  activeHeading.value = currentIndex
+
+  activeIndex.value = current
+}
+
+let ticking = false
+function onScroll() {
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      updateActiveHeading()
+      ticking = false
+    })
+    ticking = true
+  }
 }
 
 watch(() => props.headings, () => {
   setTimeout(updateActiveHeading, 100)
+}, { immediate: true })
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true })
+  updateActiveHeading()
 })
 
-if (typeof window !== 'undefined') {
-  window.addEventListener('scroll', updateActiveHeading)
-}
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 </script>
 
 <style scoped lang="scss">
 @import '../../assets/styles/variables.scss';
 
 .toc {
-  position: sticky;
-  top: 80px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  width: 260px;
+  background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: $border-radius;
   padding: $spacing-lg;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  max-width: 280px;
-  min-width: 200px;
-  z-index: 50;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  }
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .toc-title {
@@ -109,24 +132,20 @@ if (typeof window !== 'undefined') {
   font-size: 13px;
   line-height: 1.4;
   cursor: pointer;
-  opacity: 0.7;
 
   &:hover {
     background: var(--bg-secondary);
     color: var(--accent-color);
-    opacity: 1;
-    transform: translateX(4px);
-  }
-
-  &.active {
-    background: var(--accent-color);
-    color: white;
-    font-weight: 500;
-    opacity: 1;
   }
 }
 
-@media (max-width: 1024px) {
+.toc-item.active a {
+  background: var(--accent-color);
+  color: white;
+  font-weight: 500;
+}
+
+@media (max-width: 1200px) {
   .toc {
     display: none;
   }

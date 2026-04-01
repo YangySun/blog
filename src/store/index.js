@@ -34,12 +34,12 @@ export const useStore = defineStore('main', () => {
 
   const allCategories = computed(() => {
     const categories = new Set(articles.value.map(a => a.category).filter(Boolean))
-    return ['all', ...Array.from(categories)]
+    return Array.from(categories)
   })
 
   const allTags = computed(() => {
     const tags = new Set(articles.value.flatMap(a => a.tags || []))
-    return ['all', ...Array.from(tags)]
+    return Array.from(tags)
   })
 
   const filteredArticles = computed(() => {

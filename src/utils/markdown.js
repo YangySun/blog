@@ -73,14 +73,17 @@ export async function loadArticles() {
 export async function loadArticle(id) {
   const articleModules = import.meta.glob('/src/data/articles/*.md', { query: '?raw', import: 'default' })
   const path = `/src/data/articles/${id}.md`
-  
+
   if (!articleModules[path]) {
     return null
   }
-  
+
   const content = await articleModules[path]()
   const { frontmatter, body } = parseFrontmatter(content)
-  
+
+  const textContent = body.replace(/[#*`\[\]()]/g, '').trim()
+  const wordCount = textContent.split(/\s+/).filter(word => word.length > 0).length
+
   return {
     id,
     title: frontmatter.title || 'Untitled',
@@ -88,6 +91,7 @@ export async function loadArticle(id) {
     tags: frontmatter.tags || [],
     category: frontmatter.category || '未分类',
     description: frontmatter.description || '',
-    content: marked.parse(body)
+    content: marked.parse(body),
+    wordCount
   }
 }

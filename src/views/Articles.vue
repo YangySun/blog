@@ -2,7 +2,7 @@
   <div class="articles-page">
     <div class="page-header">
       <h1 class="page-title">文章列表</h1>
-      <div class="search-bar">
+      <div class="search-wrapper">
         <input
           v-model="searchQuery"
           type="text"
@@ -16,22 +16,21 @@
       <div
         v-for="(article, index) in filteredArticles"
         :key="article.id"
-        class="timeline-item scale-animation"
+        class="timeline-item"
         :style="{ animationDelay: `${index * 0.05}s` }"
       >
         <div class="timeline-marker">
           <div class="marker-dot"></div>
-          <div class="marker-line"></div>
         </div>
         <router-link :to="`/blog/article/${article.id}`" class="article-card">
           <div class="article-meta">
-            <span class="article-date">📅 {{ formatDate(article.date) }}</span>
-            <span class="article-category">📁 {{ article.category }}</span>
+            <span class="article-date">{{ formatDate(article.date) }}</span>
+            <span class="article-category">{{ article.category }}</span>
           </div>
           <h2 class="article-title">{{ article.title }}</h2>
           <p class="article-description">{{ article.description }}</p>
           <div class="article-tags">
-            <span v-for="tag in article.tags" :key="tag" class="tag">
+            <span v-for="tag in article.tags.slice(0, 3)" :key="tag" class="tag">
               {{ tag }}
             </span>
           </div>
@@ -40,7 +39,6 @@
     </div>
 
     <div v-if="filteredArticles.length === 0" class="no-results">
-      <div class="no-results-icon">📭</div>
       <p>没有找到匹配的文章</p>
     </div>
   </div>
@@ -72,50 +70,38 @@ onMounted(async () => {
 @import '../assets/styles/variables.scss';
 
 .articles-page {
-  padding: $spacing-xl 0;
   max-width: 900px;
   margin: 0 auto;
+  padding: 40px 20px;
 }
 
 .page-header {
   text-align: center;
-  margin-bottom: $spacing-xxl;
+  margin-bottom: 48px;
 }
 
 .page-title {
-  font-size: $font-size-xxl;
-  margin-bottom: $spacing-lg;
+  font-size: 2rem;
+  margin-bottom: 24px;
   color: var(--text-primary);
-  position: relative;
-  display: inline-block;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
-    border-radius: 2px;
-  }
+  font-weight: 700;
 }
 
-.search-bar {
-  margin-top: $spacing-lg;
+.search-wrapper {
+  display: flex;
+  justify-content: center;
 }
 
 .search-input {
   width: 100%;
-  max-width: 500px;
-  padding: $spacing-md $spacing-lg;
+  max-width: 400px;
+  padding: 12px 20px;
   border: 2px solid var(--border-color);
   border-radius: 50px;
-  font-size: $font-size-md;
+  font-size: 1rem;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  transition: $transition;
+  transition: all 0.2s ease;
 
   &:focus {
     outline: none;
@@ -130,33 +116,28 @@ onMounted(async () => {
 
 .articles-timeline {
   position: relative;
-  padding-left: $spacing-xl;
-}
+  padding-left: 40px;
 
-.articles-timeline::before {
-  content: '';
-  position: absolute;
-  left: 7px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(
-    180deg,
-    var(--accent-color) 0%,
-    var(--border-color) 100%
-  );
+  &::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent-color), var(--border-color));
+  }
 }
 
 .timeline-item {
   position: relative;
-  margin-bottom: $spacing-lg;
-  padding-left: $spacing-lg;
+  margin-bottom: 32px;
 }
 
 .timeline-marker {
   position: absolute;
-  left: -2px;
-  top: 24px;
+  left: -40px;
+  top: 20px;
   z-index: 1;
 }
 
@@ -169,32 +150,36 @@ onMounted(async () => {
   box-shadow: 0 0 0 2px var(--accent-color);
 }
 
-.marker-line {
-  display: none;
-}
-
 .article-card {
   display: block;
-  padding: $spacing-lg;
+  padding: 24px;
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: $border-radius;
-  box-shadow: $shadow;
-  transition: $transition;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
   text-decoration: none;
 
   &:hover {
     transform: translateX(8px);
-    box-shadow: $shadow-hover;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     border-color: var(--accent-color);
+
+    .article-title {
+      color: var(--accent-color);
+    }
+
+    .marker-dot {
+      transform: scale(1.2);
+    }
   }
 }
 
 .article-meta {
   display: flex;
-  gap: $spacing-md;
-  margin-bottom: $spacing-sm;
-  font-size: $font-size-sm;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 14px;
 }
 
 .article-date,
@@ -203,19 +188,15 @@ onMounted(async () => {
 }
 
 .article-title {
-  font-size: $font-size-xl;
-  margin-bottom: $spacing-sm;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
   color: var(--text-primary);
-  transition: $transition;
-
-  .article-card:hover & {
-    color: var(--accent-color);
-  }
+  transition: color 0.2s ease;
 }
 
 .article-description {
   color: var(--text-secondary);
-  margin-bottom: $spacing-md;
+  margin-bottom: 12px;
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -225,17 +206,16 @@ onMounted(async () => {
 
 .article-tags {
   display: flex;
-  flex-wrap: wrap;
-  gap: $spacing-sm;
+  gap: 8px;
 }
 
 .tag {
-  padding: $spacing-xs $spacing-sm;
+  padding: 4px 12px;
   background: var(--bg-secondary);
   border-radius: 4px;
   color: var(--text-secondary);
-  font-size: $font-size-sm;
-  transition: $transition;
+  font-size: 13px;
+  transition: all 0.2s ease;
 
   .article-card:hover & {
     background: var(--accent-color);
@@ -245,27 +225,27 @@ onMounted(async () => {
 
 .no-results {
   text-align: center;
-  padding: $spacing-xxl;
+  padding: 80px 20px;
   color: var(--text-secondary);
-}
-
-.no-results-icon {
-  font-size: 64px;
-  margin-bottom: $spacing-md;
+  font-size: 1.125rem;
 }
 
 @media (max-width: 768px) {
   .articles-page {
-    padding: $spacing-md;
+    padding: 20px 16px;
   }
 
   .articles-timeline {
-    padding-left: $spacing-md;
+    padding-left: 30px;
+  }
+
+  .timeline-marker {
+    left: -30px;
   }
 
   .article-meta {
     flex-direction: column;
-    gap: $spacing-xs;
+    gap: 4px;
   }
 }
 </style>

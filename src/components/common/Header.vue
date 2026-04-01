@@ -1,10 +1,22 @@
 <template>
   <header class="header" :class="{ 'header--transparent': isArticlePage && !isScrolled, 'header--scrolled': isScrolled }">
-    <div class="container header-container">
-      <router-link to="/blog/" class="logo">
-        <h1>My Blog</h1>
-      </router-link>
-      <nav class="nav">
+    <div class="header-container">
+      <div class="header-left">
+        <router-link to="/blog/" class="logo">
+          <span class="logo-text">眠羊</span>
+          <span class="logo-hover-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </span>
+        </router-link>
+      </div>
+
+      <div class="header-center" v-if="isArticlePage && isScrolled">
+        <span class="article-title">{{ articleTitle }}</span>
+      </div>
+      <nav class="nav" v-else>
         <router-link to="/blog/" class="nav-link">首页</router-link>
         <div class="dropdown">
           <router-link to="/blog/articles" class="nav-link dropdown-toggle">
@@ -29,34 +41,180 @@
         <router-link to="/blog/about" class="nav-link">关于</router-link>
         <router-link to="/blog/links" class="nav-link">友链</router-link>
       </nav>
-      <ThemeToggle />
+
+      <div class="header-right">
+        <button @click="toggleSearch" class="header-btn" title="搜索文章">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </button>
+        <button @click="goRandomArticle" :class="['header-btn', { spinning: isSpinning }]" title="随机文章">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 3h5v5"/>
+            <path d="M4 20L21 3"/>
+            <path d="M21 16v5h-5"/>
+            <path d="M15 15l6 6"/>
+            <path d="M4 4l5 5"/>
+          </svg>
+        </button>
+        <ThemeToggle />
+        <button
+          v-if="showBackToTop"
+          @click="scrollToTop"
+          class="back-to-top-btn"
+          title="回到顶部"
+        >
+          ↑
+        </button>
+      </div>
+
+      <div class="search-overlay" v-if="showSearch" @click.self="toggleSearch">
+        <div class="search-modal">
+          <input
+            ref="searchInput"
+            v-model="searchQuery"
+            @keyup.enter="searchArticles"
+            placeholder="搜索文章..."
+            class="search-input"
+          />
+          <div v-if="searchResults.length > 0" class="search-results">
+            <router-link
+              v-for="article in searchResults"
+              :key="article.id"
+              :to="`/blog/article/${article.id}`"
+              class="search-result-item"
+              @click="toggleSearch"
+            >
+              <span class="result-title">{{ article.title }}</span>
+              <span class="result-category">{{ article.category }}</span>
+            </router-link>
+          </div>
+          <p v-else-if="searchQuery && !searching" class="search-empty">未找到相关文章</p>
+        </div>
+      </div>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import ThemeToggle from './ThemeToggle.vue'
+import { useStore } from '../../store'
 
 const route = useRoute()
+const router = useRouter()
+const store = useStore()
 const isScrolled = ref(false)
 const isArticlePage = ref(false)
+const articleTitle = ref('')
+const showBackToTop = ref(false)
 
 function handleScroll() {
   if (isArticlePage.value) {
-    isScrolled.value = window.scrollY > 100
+    isScrolled.value = window.scrollY > 0
+    showBackToTop.value = window.scrollY > 0
   } else {
-    isScrolled.value = true
+    isScrolled.value = window.scrollY > 10
+    showBackToTop.value = window.scrollY > 300
   }
 }
 
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
+const showSearch = ref(false)
+const searchQuery = ref('')
+const searchResults = ref([])
+const isSpinning = ref(false)
+const searchInput = ref(null)
+
+async function toggleSearch() {
+  showSearch.value = !showSearch.value
+  if (showSearch.value) {
+    if (store.articles.length === 0) {
+      await loadArticles()
+    }
+    searchQuery.value = ''
+    searchResults.value = []
+    await nextTick()
+    searchInput.value?.focus()
+  }
+}
+
+async function loadArticles() {
+  if (store.articles.length > 0) return
+  const { loadArticles } = await import('../../utils/markdown')
+  const articles = await loadArticles()
+  store.setArticles(articles)
+}
+
+function searchArticles() {
+  if (!searchQuery.value.trim()) {
+    searchResults.value = []
+    return
+  }
+
+  const query = searchQuery.value.toLowerCase()
+  searchResults.value = store.articles.filter(article =>
+    article.title.toLowerCase().includes(query) ||
+    article.category.toLowerCase().includes(query) ||
+    article.tags?.some(tag => tag.toLowerCase().includes(query))
+  ).slice(0, 10)
+}
+
+async function goRandomArticle() {
+  if (isSpinning.value) return
+  isSpinning.value = true
+
+  if (store.articles.length === 0) {
+    await loadArticles()
+  }
+
+  const currentArticleId = route.params.id
+  let randomArticle
+  let attempts = 0
+
+  do {
+    const randomIndex = Math.floor(Math.random() * store.articles.length)
+    randomArticle = store.articles[randomIndex]
+    attempts++
+    await new Promise(resolve => setTimeout(resolve, 100))
+  } while (randomArticle.id === currentArticleId && attempts < 10 && store.articles.length > 1)
+
+  await new Promise(resolve => setTimeout(resolve, 300))
+  router.push(`/blog/article/${randomArticle.id}`)
+}
+
+watch(searchQuery, () => {
+  searchArticles()
+})
+
 watch(() => route.params.id, (newId) => {
   isArticlePage.value = !!newId
+  if (!newId) {
+    articleTitle.value = ''
+  }
 }, { immediate: true })
 
 watch(() => route.path, () => {
   handleScroll()
+  isSpinning.value = false
+})
+
+watch(() => route.params.id, (id) => {
+  if (id) {
+    const articles = JSON.parse(sessionStorage.getItem('articles') || '[]')
+    const article = articles.find(a => a.id === id)
+    if (article) {
+      articleTitle.value = article.title
+    }
+  }
 })
 
 onMounted(() => {
@@ -84,7 +242,7 @@ onUnmounted(() => {
     background: transparent;
     box-shadow: none;
 
-    .logo h1 {
+    .logo .logo-text {
       color: white;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
@@ -103,9 +261,23 @@ onUnmounted(() => {
       color: rgba(255, 255, 255, 0.9);
     }
 
+    .dropdown-menu {
+      background: rgba(255, 255, 255, 0.98);
+      border-color: rgba(0, 0, 0, 0.1);
+
+      .dropdown-item {
+        color: var(--text-primary);
+
+        &:hover {
+          background: var(--bg-secondary);
+          color: var(--accent-color);
+        }
+      }
+    }
+
     .theme-toggle {
       background-color: rgba(255, 255, 255, 0.2);
-      
+
       &:hover {
         background-color: rgba(255, 255, 255, 0.3);
       }
@@ -115,14 +287,23 @@ onUnmounted(() => {
         color: white;
       }
     }
+
+    .back-to-top-btn {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+    }
   }
 
   &--scrolled {
     background: var(--bg-primary);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
-    .logo h1 {
-      color: var(--accent-color);
+    .logo .logo-text {
+      color: var(--text-primary);
     }
 
     .nav-link {
@@ -137,34 +318,234 @@ onUnmounted(() => {
     .dropdown-arrow {
       color: var(--text-secondary);
     }
+
+    .back-to-top-btn {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+
+      &:hover {
+        background-color: var(--accent-color);
+        color: white;
+      }
+    }
   }
 }
 
 .header-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 64px;
+  padding: 0 40px;
+}
+
+.header-left {
   display: flex;
   align-items: center;
+}
+
+.header-center {
+  text-align: center;
+  padding: 0 20px;
+
+  .article-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.header-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: $border-radius;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: var(--bg-secondary);
+    color: var(--accent-color);
+  }
+
+  &.spinning {
+    animation: spin 0.5s linear infinite;
+
+    svg {
+      animation: shuffle 0.2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shuffle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px) rotate(-5deg); }
+  75% { transform: translateX(2px) rotate(5deg); }
+}
+
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 120px;
+}
+
+.search-modal {
+  width: 100%;
+  max-width: 600px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  margin: 0 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 20px 24px;
+  font-size: $font-size-lg;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  outline: none;
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+}
+
+.search-results {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  display: flex;
   justify-content: space-between;
-  height: 64px;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: background 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: var(--bg-secondary);
+  }
+
+  .result-title {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .result-category {
+    font-size: $font-size-sm;
+    color: var(--text-secondary);
+  }
+}
+
+.search-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-secondary);
 }
 
 .logo {
-  h1 {
+  text-decoration: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .logo-text {
     font-size: $font-size-xl;
-    color: var(--accent-color);
-    margin: 0;
-    transition: all 0.4s ease;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    width: 60px;
+    text-align: center;
+  }
+
+  .logo-hover-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-color);
+    color: white;
+    border-radius: $border-radius;
+    opacity: 0;
+    transition: all 0.3s ease;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &:hover {
+    .logo-text {
+      opacity: 0;
+    }
+
+    .logo-hover-icon {
+      opacity: 1;
+    }
   }
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: $spacing-lg;
+  gap: 40px;
 }
 
 .nav-link {
   color: var(--text-primary);
   font-weight: 500;
+  font-size: $font-size-md;
   transition: $transition;
   text-decoration: none;
 
@@ -252,8 +633,31 @@ onUnmounted(() => {
   }
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-to-top-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 768px) {
   .nav {
+    display: none;
+  }
+
+  .header-center {
     display: none;
   }
 }

@@ -2,14 +2,39 @@
   <div class="article-page">
     <div class="article-hero" :style="{ backgroundColor: article?.heroColor || '#667eea' }" v-if="article">
       <div class="hero-content">
-        <h1 class="article-title">{{ article.title }}</h1>
-        <div class="article-meta">
-          <span class="article-date">📅 {{ formatDate(article.date) }}</span>
-          <span class="article-category">📁 {{ article.category }}</span>
+        <div class="hero-meta-row">
+          <span class="article-category">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+            </svg>
+            {{ article.category }}
+          </span>
+          <div class="article-tags">
+            <span v-for="tag in article.tags" :key="tag" class="tag">
+              {{ tag }}
+            </span>
+          </div>
         </div>
-        <div class="article-tags">
-          <span v-for="tag in article.tags" :key="tag" class="tag">
-            {{ tag }}
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="hero-info-row">
+          <span class="article-date">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            {{ formatDate(article.date) }}
+          </span>
+          <span class="article-words">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            {{ article.wordCount || 0 }} 字
           </span>
         </div>
       </div>
@@ -28,28 +53,29 @@
         </svg>
       </div>
     </div>
-    <div class="article-container" v-if="article">
-      <div class="article-body">
+    <div class="article-layout" v-if="article">
+      <div class="article-main">
         <div class="article-content" ref="contentRef" v-html="article.content"></div>
-        <TableOfContents :headings="headings" @navigate="scrollToHeading" />
+        <div class="article-navigation">
+          <router-link
+            v-if="prevArticle"
+            :to="`/blog/article/${prevArticle.id}`"
+            class="nav-link prev"
+          >
+            ← {{ prevArticle.title }}
+          </router-link>
+          <router-link
+            v-if="nextArticle"
+            :to="`/blog/article/${nextArticle.id}`"
+            class="nav-link next"
+          >
+            {{ nextArticle.title }} →
+          </router-link>
+        </div>
       </div>
-      
-      <div class="article-navigation">
-        <router-link
-          v-if="prevArticle"
-          :to="`/blog/article/${prevArticle.id}`"
-          class="nav-link prev"
-        >
-          ← {{ prevArticle.title }}
-        </router-link>
-        <router-link
-          v-if="nextArticle"
-          :to="`/blog/article/${nextArticle.id}`"
-          class="nav-link next"
-        >
-          {{ nextArticle.title }} →
-        </router-link>
-      </div>
+      <aside class="article-toc">
+        <FloatingToc :headings="headings" />
+      </aside>
     </div>
     <div v-else class="loading">
       <div class="loading-spinner"></div>
@@ -63,7 +89,7 @@ import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '../store'
 import { formatDate } from '../utils/date'
-import TableOfContents from '../components/article/TableOfContents.vue'
+import FloatingToc from '../components/article/FloatingToc.vue'
 
 const route = useRoute()
 const store = useStore()
@@ -86,7 +112,7 @@ const nextArticle = computed(() => {
 
 function extractHeadings() {
   if (!contentRef.value) return
-  
+
   const elements = contentRef.value.querySelectorAll('h1, h2, h3, h4, h5, h6')
   headings.value = Array.from(elements).map((el, index) => {
     const text = el.textContent.trim()
@@ -99,28 +125,17 @@ function extractHeadings() {
   })
 }
 
-function scrollToHeading(id) {
-  const element = document.getElementById(id)
-  if (element) {
-    const headerOffset = 80
-    const elementPosition = element.getBoundingClientRect().top
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-    
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    })
-  }
-}
-
 onMounted(async () => {
   const { loadArticles, loadArticle } = await import('../utils/markdown')
   if (store.articles.length === 0) {
     const articles = await loadArticles()
     store.setArticles(articles)
+    sessionStorage.setItem('articles', JSON.stringify(articles))
+  } else {
+    sessionStorage.setItem('articles', JSON.stringify(store.articles))
   }
   article.value = await loadArticle(route.params.id)
-  
+
   await nextTick()
   extractHeadings()
 })
@@ -128,7 +143,7 @@ onMounted(async () => {
 watch(() => route.params.id, async (newId) => {
   const { loadArticle } = await import('../utils/markdown')
   article.value = await loadArticle(newId)
-  
+
   await nextTick()
   extractHeadings()
 })
@@ -139,30 +154,26 @@ watch(() => route.params.id, async (newId) => {
 
 .article-page {
   width: 100%;
-  overflow-x: hidden;
-  position: relative;
+  min-height: 100vh;
 }
 
 .article-hero {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 140px 20px 80px;
+  margin-top: -64px;
+  padding: 160px 20px 100px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   text-align: center;
   overflow: hidden;
-  min-height: 300px;
-  width: 100%;
-  z-index: 0;
+  margin-bottom: 0;
+  position: relative;
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 900px;
   margin: 0 auto;
+  padding-left: 60px;
+  text-align: left;
 }
 
 .wave-separator {
@@ -170,7 +181,7 @@ watch(() => route.params.id, async (newId) => {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 100px;
 }
 
 .wave {
@@ -222,59 +233,91 @@ watch(() => route.params.id, async (newId) => {
 }
 
 .article-title {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 700;
   margin-bottom: $spacing-md;
   line-height: 1.3;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: left;
 }
 
-.article-meta {
+.hero-meta-row {
   display: flex;
-  justify-content: center;
-  gap: $spacing-lg;
+  align-items: center;
+  gap: $spacing-md;
   margin-bottom: $spacing-md;
-  font-size: $font-size-sm;
-  opacity: 0.95;
+  flex-wrap: wrap;
+  font-size: $font-size-md;
+}
+
+.hero-info-row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  font-size: $font-size-md;
+  opacity: 0.9;
+}
+
+.article-category {
+  color: white;
+  font-size: $font-size-md;
 }
 
 .article-tags {
   display: flex;
-  justify-content: center;
   gap: $spacing-sm;
   flex-wrap: wrap;
+}
+
+.article-date,
+.article-words {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .tag {
   background-color: rgba(255, 255, 255, 0.2);
   padding: $spacing-xs $spacing-sm;
   border-radius: $border-radius;
-  font-size: $font-size-sm;
+  font-size: $font-size-md;
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
 }
 
-.article-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
+.icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 4px;
 }
 
-.article-body {
+.article-layout {
   display: flex;
-  gap: $spacing-xl;
-  align-items: flex-start;
-  padding: $spacing-xl 20px;
-  background: var(--bg-primary);
+  gap: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
   position: relative;
   z-index: 1;
-  min-height: 500px;
+}
+
+.article-main {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.article-toc {
+  width: 280px;
+  flex-shrink: 0;
+  padding-left: 30px;
 }
 
 .article-content {
-  flex: 1;
-  min-width: 0;
   font-size: $font-size-md;
   line-height: 1.8;
   color: var(--text-primary);
@@ -344,7 +387,7 @@ watch(() => route.params.id, async (newId) => {
   display: flex;
   justify-content: space-between;
   margin-top: $spacing-xl;
-  padding: $spacing-lg 20px $spacing-xl;
+  padding-bottom: $spacing-xl;
 }
 
 .nav-link {

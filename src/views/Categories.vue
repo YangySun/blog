@@ -1,23 +1,25 @@
 <template>
   <div class="categories-page">
     <h1 class="page-title">分类</h1>
-    
-    <div v-if="categories.length > 0" class="categories-grid">
+    <div class="categories-grid">
       <router-link
         v-for="(count, category) in categoriesWithCount"
         :key="category"
         :to="`/blog/category/${encodeURIComponent(category)}`"
         class="category-card"
       >
-        <div class="category-icon">📁</div>
+        <div class="category-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+          </svg>
+        </div>
         <div class="category-info">
-          <h3 class="category-name">{{ category }}</h3>
-          <p class="category-count">{{ count }} 篇文章</p>
+          <h3>{{ category }}</h3>
+          <p>{{ count }} 篇文章</p>
         </div>
       </router-link>
     </div>
-    
-    <div v-else class="no-results">
+    <div v-if="Object.keys(categoriesWithCount).length === 0" class="no-results">
       <p>暂无分类</p>
     </div>
   </div>
@@ -39,13 +41,10 @@ const categoriesWithCount = computed(() => {
   return counts
 })
 
-const categories = computed(() => Object.keys(categoriesWithCount.value))
-
 onMounted(async () => {
-  const { loadArticles } = await import('../utils/markdown')
   if (store.articles.length === 0) {
-    const articles = await loadArticles()
-    store.setArticles(articles)
+    const { loadArticles } = await import('../utils/markdown')
+    store.setArticles(await loadArticles())
   }
 })
 </script>
@@ -54,20 +53,15 @@ onMounted(async () => {
 @import '../assets/styles/variables.scss';
 
 .categories-page {
-  padding: $spacing-xl 0;
+  @include page-container;
 }
 
 .page-title {
-  font-size: $font-size-xxl;
-  margin-bottom: $spacing-xl;
-  color: var(--text-primary);
-  text-align: center;
+  @include page-title;
 }
 
 .categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: $spacing-lg;
+  @include card-grid;
 }
 
 .category-card {
@@ -88,28 +82,23 @@ onMounted(async () => {
 }
 
 .category-icon {
-  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: var(--text-secondary);
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .category-info {
   flex: 1;
-}
-
-.category-name {
-  font-size: $font-size-lg;
-  margin-bottom: $spacing-sm;
-  color: var(--text-primary);
-}
-
-.category-count {
-  color: var(--text-secondary);
-  font-size: $font-size-sm;
+  h3 { font-size: $font-size-lg; color: var(--text-primary); margin-bottom: $spacing-sm; }
+  p { color: var(--text-secondary); font-size: $font-size-sm; }
 }
 
 .no-results {
-  text-align: center;
-  padding: $spacing-xl;
-  color: var(--text-secondary);
-  font-size: $font-size-lg;
+  @include no-results;
 }
 </style>

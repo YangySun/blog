@@ -1,8 +1,7 @@
 <template>
   <div class="tags-page">
     <h1 class="page-title">标签</h1>
-    
-    <div v-if="tags.length > 0" class="tags-cloud">
+    <div class="tags-cloud">
       <router-link
         v-for="tag in tags"
         :key="tag.name"
@@ -14,8 +13,7 @@
         <span class="tag-count">{{ tag.count }}</span>
       </router-link>
     </div>
-    
-    <div v-else class="no-results">
+    <div v-if="tags.length === 0" class="no-results">
       <p>暂无标签</p>
     </div>
   </div>
@@ -27,32 +25,26 @@ import { useStore } from '../store'
 
 const store = useStore()
 
-const tagsWithCount = computed(() => {
+const tags = computed(() => {
   const counts = {}
   store.articles.forEach(article => {
-    if (article.tags && Array.isArray(article.tags)) {
-      article.tags.forEach(tag => {
-        counts[tag] = (counts[tag] || 0) + 1
-      })
-    }
+    article.tags?.forEach(tag => {
+      counts[tag] = (counts[tag] || 0) + 1
+    })
   })
-  return counts
-})
-
-const tags = computed(() => {
-  const tagArray = Object.entries(tagsWithCount.value).map(([name, count]) => ({
-    name,
-    count,
-    size: Math.max(14, Math.min(32, 14 + count * 4))
-  }))
-  return tagArray.sort((a, b) => b.count - a.count)
+  return Object.entries(counts)
+    .map(([name, count]) => ({
+      name,
+      count,
+      size: Math.max(14, Math.min(32, 14 + count * 4))
+    }))
+    .sort((a, b) => b.count - a.count)
 })
 
 onMounted(async () => {
-  const { loadArticles } = await import('../utils/markdown')
   if (store.articles.length === 0) {
-    const articles = await loadArticles()
-    store.setArticles(articles)
+    const { loadArticles } = await import('../utils/markdown')
+    store.setArticles(await loadArticles())
   }
 })
 </script>
@@ -61,14 +53,11 @@ onMounted(async () => {
 @import '../assets/styles/variables.scss';
 
 .tags-page {
-  padding: $spacing-xl 0;
+  @include page-container;
 }
 
 .page-title {
-  font-size: $font-size-xxl;
-  margin-bottom: $spacing-xl;
-  color: var(--text-primary);
-  text-align: center;
+  @include page-title;
 }
 
 .tags-cloud {
@@ -95,6 +84,11 @@ onMounted(async () => {
     background: var(--accent-color);
     color: white;
     border-color: var(--accent-color);
+
+    .tag-count {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
   }
 }
 
@@ -106,15 +100,7 @@ onMounted(async () => {
   color: var(--text-secondary);
 }
 
-.tag-item:hover .tag-count {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
 .no-results {
-  text-align: center;
-  padding: $spacing-xl;
-  color: var(--text-secondary);
-  font-size: $font-size-lg;
+  @include no-results;
 }
 </style>
