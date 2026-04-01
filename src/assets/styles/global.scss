@@ -71,7 +71,7 @@ button {
 }
 
 .card {
-  background: $bg-primary;
+  background: var(--bg-primary);
   border-radius: $border-radius;
   box-shadow: $shadow;
   padding: $spacing-lg;
@@ -96,20 +96,20 @@ button {
   outline: none;
 
   &-primary {
-    background-color: $accent-color;
+    background-color: var(--accent-color);
     color: white;
 
     &:hover {
-      background-color: $accent-hover;
+      background-color: var(--accent-hover);
     }
   }
 
   &-secondary {
-    background-color: $bg-secondary;
-    color: $text-primary;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
 
     &:hover {
-      background-color: color.adjust($bg-secondary, $lightness: -5%);
+      background-color: var(--bg-secondary);
     }
   }
 }

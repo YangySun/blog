@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Loading />
     <Header />
     <main class="main-content">
       <router-view v-slot="{ Component }">
@@ -15,25 +16,23 @@
 <script setup>
 import Header from './components/common/Header.vue'
 import Footer from './components/common/Footer.vue'
+import Loading from './components/common/Loading.vue'
 </script>
 
 <style>
 html, body {
   overflow-x: hidden;
-  background-color: #f7f9fe;
 }
 
 #app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f7f9fe;
 }
 
 .main-content {
   flex: 1;
   padding-top: 64px;
-  background-color: #f7f9fe;
 }
 </style>
 

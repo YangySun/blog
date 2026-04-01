@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useLoadingStore } from '../store/loading'
 
 const routes = [
   {
@@ -58,6 +59,19 @@ const router = createRouter({
       return { top: 0 }
     }
   }
+})
+
+router.beforeEach((to, from, next) => {
+  const loading = useLoadingStore()
+  loading.start('正在加载页面...')
+  next()
+})
+
+router.afterEach(() => {
+  const loading = useLoadingStore()
+  setTimeout(() => {
+    loading.finish('加载完成!')
+  }, 300)
 })
 
 export default router

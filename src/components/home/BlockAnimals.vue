@@ -5,7 +5,7 @@
       v-for="(figure, index) in figures"
       :key="index"
       :id="figure.id"
-      :class="['figure', figure.class]"
+      :class="['figure', figure.class, { 'is-sad': index === 1 && isSad }]"
       :style="getFigureStyle(index)"
     >
       <div :class="['body', figure.bodyClass]">
@@ -29,19 +29,17 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive, onMounted, onBeforeUnmount, watch } from 'vue';
 
-// 接收父组件状态
 const props = defineProps({
-  // 是否触发小橙点头（对应你提到的 6 个 Card 的 hover 状态）
   isNodActive: {
     type: Boolean,
     default: false
   }
 });
 
-const container = ref<HTMLElement | null>(null);
+const container = ref(null);
 
 // 角色基础配置
 const figures = reactive([
@@ -59,8 +57,14 @@ const state = reactive({
   nodPhase: 0,
 });
 
+// 小橙不开心状态
+const isSad = ref(false);
+let sadTimeout = null;
+let hoverTimer = null;
+let canBeSad = ref(false);
+
 // 计算角色整体变换
-const getFigureStyle = (index: number) => {
+const getFigureStyle = (index) => {
   const centerX = state.rect.width / 2;
   const pctX = (state.smoothMouse.x - centerX) / (state.rect.width / 2 || 1);
   const clampedPctX = Math.max(-1.2, Math.min(1.2, pctX));
@@ -85,15 +89,18 @@ const getFigureStyle = (index: number) => {
 };
 
 // 计算面部随动
-const getFaceStyle = (index: number) => {
+const getFaceStyle = (index) => {
   const isOrange = index === 1;
   const centerX = state.rect.width / 2;
   const centerY = state.rect.height / 2;
   const pctX = (state.smoothMouse.x - centerX) / (state.rect.width / 2 || 1);
   const pctY = (state.smoothMouse.y - centerY) / (state.rect.height / 2 || 1);
 
-  const moveX = pctX * (isOrange ? 22 : 15);
-  const moveY = pctY * (isOrange ? 15 : 10);
+  const clampedX = Math.max(-1, Math.min(1, pctX));
+  const clampedY = Math.max(-1, Math.min(1, pctY));
+
+  const moveX = clampedX * (isOrange ? 18 : 14);
+  const moveY = clampedY * (isOrange ? 12 : 8);
 
   return {
     transform: `translate(${moveX}px, ${moveY}px)`
@@ -101,14 +108,14 @@ const getFaceStyle = (index: number) => {
 };
 
 // 计算瞳孔追踪
-const getPupilStyle = (index: number) => {
+const getPupilStyle = (index) => {
   const isOrange = index === 1;
   const centerX = state.rect.width / 2;
   const centerY = state.rect.height / 2;
   const pctX = (state.smoothMouse.x - centerX) / (state.rect.width / 2 || 1);
   const pctY = (state.smoothMouse.y - centerY) / (state.rect.height / 2 || 1);
 
-  const range = isOrange ? 12 : 8;
+  const range = isOrange ? 10 : 7;
   const pX = Math.max(-1, Math.min(1, pctX)) * range;
   const pY = Math.max(-1, Math.min(1, pctY)) * range;
 
@@ -118,7 +125,7 @@ const getPupilStyle = (index: number) => {
 };
 
 // 动画循环
-let rafId: number;
+let rafId;
 const animate = () => {
   state.smoothMouse.x += (state.mouse.x - state.smoothMouse.x) * 0.1;
   state.smoothMouse.y += (state.mouse.y - state.smoothMouse.y) * 0.1;
@@ -133,13 +140,39 @@ const animate = () => {
 };
 
 // 监听鼠标
-const onMouseMove = (e: MouseEvent) => {
+const onMouseMove = (e) => {
   state.mouse.x = e.clientX - state.rect.left;
   state.mouse.y = e.clientY - state.rect.top;
 };
 
+// 鼠标移出容器 - 小橙不开心
+watch(() => props.isNodActive, (newVal, oldVal) => {
+  if (oldVal === true && newVal === false && canBeSad.value && !isSad.value) {
+    isSad.value = true;
+    if (sadTimeout) clearTimeout(sadTimeout);
+    sadTimeout = window.setTimeout(() => {
+      isSad.value = false;
+      canBeSad.value = false;
+    }, 1000);
+  }
+
+  if (newVal === true && !hoverTimer) {
+    hoverTimer = window.setTimeout(() => {
+      canBeSad.value = true;
+    }, 3000);
+  }
+
+  if (newVal === false) {
+    if (hoverTimer) {
+      clearTimeout(hoverTimer);
+      hoverTimer = null;
+    }
+    canBeSad.value = false;
+  }
+});
+
 // 随机眨眼
-const blinkIntervals: number[] = [];
+const blinkIntervals = [];
 const startBlinking = () => {
   figures.forEach((fig, idx) => {
     const runBlink = () => {
@@ -197,7 +230,7 @@ onBeforeUnmount(() => {
 /* 定位与层级 */
 .purple-rect { left: 16%; width: 30%; height: 95%; z-index: 1; }
 .orange-blob { left: 2%; width: 45%; height: 38%; z-index: 2; }
-.black-rect { left: 42%; width: 19%; height: 69%; z-index: 3; }
+.black-rect { left: 42%; width: 19%; height: 60%; z-index: 3; }
 .yellow-rounded { left: 58%; width: 24%; height: 44%; z-index: 4; }
 
 .body {
@@ -259,5 +292,25 @@ onBeforeUnmount(() => {
 /* 点头激活时的嘴巴变化 */
 :deep(.nod-active) .orange-mouth {
   width: 16px; height: 16px; border-radius: 50%; top: 55%;
+}
+
+/* 小橙不开心动画 */
+.orange-blob.is-sad {
+  animation: sad-droop 1s ease-in-out forwards;
+}
+
+.orange-blob.is-sad .orange-mouth {
+  width: 24px;
+  height: 10px;
+  border-radius: 10px 10px 0 0;
+  top: 45%;
+  background: #d35400;
+}
+
+@keyframes sad-droop {
+  0% { transform: translateY(0) scaleY(1); }
+  30% { transform: translateY(10px) scaleY(0.95); }
+  60% { transform: translateY(8px) scaleY(0.97); }
+  100% { transform: translateY(0) scaleY(1); }
 }
 </style>
