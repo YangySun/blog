@@ -28,8 +28,10 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { useStore } from '../store'
+import { useLoadingStore } from '../store/loading'
 
 const store = useStore()
+const loading = useLoadingStore()
 
 const categoriesWithCount = computed(() => {
   const counts = {}
@@ -46,6 +48,7 @@ onMounted(async () => {
     const { loadArticles } = await import('../utils/markdown')
     store.setArticles(await loadArticles())
   }
+  loading.finish('加载完成!')
 })
 </script>
 

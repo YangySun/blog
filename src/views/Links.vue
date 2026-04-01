@@ -38,7 +38,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useLoadingStore } from '../store/loading'
 
+const loading = useLoadingStore()
 const links = ref([])
 
 onMounted(async () => {
@@ -49,6 +51,7 @@ onMounted(async () => {
     console.log('使用默认友链数据')
     links.value = []
   }
+  loading.finish('加载完成!')
 })
 </script>
 

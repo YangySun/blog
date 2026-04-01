@@ -47,9 +47,11 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { useStore } from '../store'
+import { useLoadingStore } from '../store/loading'
 import { formatDate } from '../utils/date'
 
 const store = useStore()
+const loading = useLoadingStore()
 
 const filteredArticles = computed(() => store.filteredArticles)
 const searchQuery = computed({
@@ -63,6 +65,7 @@ onMounted(async () => {
     const articles = await loadArticles()
     store.setArticles(articles)
   }
+  loading.finish('加载完成!')
 })
 </script>
 

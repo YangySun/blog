@@ -73,10 +73,12 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useStore } from '../store'
+import { useLoadingStore } from '../store/loading'
 import ArticleCard from '../components/article/ArticleCard.vue'
 import BlockAnimals from '../components/home/BlockAnimals.vue'
 
 const store = useStore()
+const loading = useLoadingStore()
 const latestArticles = ref([])
 const selectedCategory = ref('')
 const isHoveringCard = ref(false)
@@ -120,6 +122,7 @@ onMounted(async () => {
   const articles = await loadArticles()
   store.setArticles(articles)
   latestArticles.value = articles
+  loading.finish('加载完成!')
 })
 </script>
 

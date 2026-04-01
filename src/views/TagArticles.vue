@@ -29,10 +29,12 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '../store'
+import { useLoadingStore } from '../store/loading'
 import ArticleCard from '../components/article/ArticleCard.vue'
 
 const route = useRoute()
 const store = useStore()
+const loading = useLoadingStore()
 const selectedTag = ref('')
 
 const allTags = computed(() => store.allTags)
@@ -50,6 +52,7 @@ onMounted(async () => {
     store.setArticles(await loadArticles())
   }
   selectedTag.value = decodeURIComponent(route.params.name)
+  loading.finish('加载完成!')
 })
 </script>
 

@@ -78,6 +78,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useLoadingStore } from '../store/loading'
+
+const loading = useLoadingStore()
 
 const profile = ref({
   name: 'Your Name',
@@ -106,6 +109,7 @@ onMounted(async () => {
   } catch (error) {
     console.log('使用默认个人信息')
   }
+  loading.finish('加载完成!')
 })
 </script>
 

@@ -67,11 +67,4 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-router.afterEach(() => {
-  const loading = useLoadingStore()
-  setTimeout(() => {
-    loading.finish('加载完成!')
-  }, 300)
-})
-
 export default router

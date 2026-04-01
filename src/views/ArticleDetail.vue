@@ -88,11 +88,13 @@
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '../store'
+import { useLoadingStore } from '../store/loading'
 import { formatDate } from '../utils/date'
 import FloatingToc from '../components/article/FloatingToc.vue'
 
 const route = useRoute()
 const store = useStore()
+const loading = useLoadingStore()
 const article = ref(null)
 const contentRef = ref(null)
 const headings = ref([])
@@ -138,6 +140,7 @@ onMounted(async () => {
 
   await nextTick()
   extractHeadings()
+  loading.finish('加载完成!')
 })
 
 watch(() => route.params.id, async (newId) => {
