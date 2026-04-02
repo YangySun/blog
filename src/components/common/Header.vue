@@ -40,6 +40,7 @@
         </div>
         <router-link to="/blog/about" class="nav-link">关于</router-link>
         <router-link to="/blog/links" class="nav-link">友链</router-link>
+        <router-link to="/blog/tools" class="nav-link">工具</router-link>
       </nav>
 
       <div class="header-right">
@@ -110,6 +111,7 @@
             <router-link to="/blog/tags" class="mobile-nav-link" @click="toggleMobileMenu">标签列表</router-link>
             <router-link to="/blog/about" class="mobile-nav-link" @click="toggleMobileMenu">关于</router-link>
             <router-link to="/blog/links" class="mobile-nav-link" @click="toggleMobileMenu">友链</router-link>
+            <router-link to="/blog/tools" class="mobile-nav-link" @click="toggleMobileMenu">工具箱</router-link>
           </nav>
         </div>
       </Transition>

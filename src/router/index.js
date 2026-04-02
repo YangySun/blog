@@ -46,6 +46,36 @@ const routes = [
     path: '/blog/links',
     name: 'Links',
     component: () => import('../views/Links.vue')
+  },
+  {
+    path: '/blog/tools',
+    name: 'Tools',
+    component: () => import('../views/Tools.vue')
+  },
+  {
+    path: '/blog/tools/json-formatter',
+    name: 'JsonFormatter',
+    component: () => import('../views/tools/JsonFormatter.vue')
+  },
+  {
+    path: '/blog/tools/base64-converter',
+    name: 'Base64Converter',
+    component: () => import('../views/tools/Base64Converter.vue')
+  },
+  {
+    path: '/blog/tools/url-encoder',
+    name: 'UrlEncoder',
+    component: () => import('../views/tools/UrlEncoder.vue')
+  },
+  {
+    path: '/blog/tools/timestamp-converter',
+    name: 'TimestampConverter',
+    component: () => import('../views/tools/TimestampConverter.vue')
+  },
+  {
+    path: '/blog/tools/color-converter',
+    name: 'ColorConverter',
+    component: () => import('../views/tools/ColorConverter.vue')
   }
 ]
 
