@@ -435,4 +435,18 @@ watch(() => route.params.id, async (newId) => {
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 960px) {
+  .article-toc {
+    display: none;
+  }
+
+  .article-main {
+    padding: 20px;
+  }
+
+  .hero-content {
+    padding-left: 20px;
+  }
+}
 </style>
