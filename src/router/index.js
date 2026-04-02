@@ -11,7 +11,8 @@ const routes = [
   {
     path: '/blog/articles',
     name: 'Articles',
-    component: () => import('../views/Articles.vue')
+    component: () => import('../views/Articles.vue'),
+    meta: { manualLoading: true }
   },
   {
     path: '/blog/article/:id',
@@ -46,7 +47,8 @@ const routes = [
   {
     path: '/blog/links',
     name: 'Links',
-    component: () => import('../views/Links.vue')
+    component: () => import('../views/Links.vue'),
+    meta: { manualLoading: true }
   },
   {
     path: '/blog/tools',
