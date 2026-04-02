@@ -9,6 +9,10 @@ export const useLoadingStore = defineStore('loading', () => {
   let progressTimer = null
 
   function start(tipText = '正在加载...') {
+    if (progressTimer) {
+      clearInterval(progressTimer)
+    }
+    
     isLoading.value = true
     progress.value = 0
     tip.value = tipText

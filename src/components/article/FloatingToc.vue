@@ -345,4 +345,52 @@ onUnmounted(() => {
     display: none;
   }
 }
+
+@media (max-width: 768px) {
+  .floating-toc-wrapper {
+    display: block;
+
+    .floating-toc {
+      display: block;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      top: auto;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+      transition: all 0.3s ease;
+
+      .toc-header {
+        padding: 0;
+        border: none;
+        height: 100%;
+        justify-content: center;
+      }
+
+      .toc-icon {
+        color: white;
+        width: 22px;
+        height: 22px;
+      }
+
+      .toc-title,
+      .toc-count {
+        display: none;
+      }
+
+      .toc-content {
+        display: none;
+      }
+
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      }
+    }
+  }
+}
 </style>

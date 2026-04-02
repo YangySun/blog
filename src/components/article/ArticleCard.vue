@@ -146,4 +146,48 @@ defineProps({
   font-size: 12px;
   white-space: nowrap;
 }
+
+@media (max-width: 768px) {
+  .article-card {
+    &:hover {
+      transform: translateY(-4px);
+
+      .card-cover {
+        height: 140px;
+      }
+    }
+  }
+
+  .card-cover {
+    height: 140px;
+  }
+
+  .card-content {
+    padding: 14px;
+  }
+
+  .article-title {
+    font-size: 16px;
+    -webkit-line-clamp: 1;
+  }
+
+  .article-description {
+    font-size: 13px;
+    -webkit-line-clamp: 2;
+  }
+
+  .article-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .article-tags {
+    width: 100%;
+  }
+
+  .tag {
+    font-size: 11px;
+  }
+}
 </style>

@@ -361,23 +361,72 @@ onMounted(async () => {
 @media (max-width: 768px) {
   .hero-section {
     flex-direction: column;
-    padding: 20px;
-  }
-
-  .hero-title {
-    font-size: 1.5rem;
-  }
-
-  .hero-categories {
-    grid-template-columns: 1fr;
+    padding: 20px 16px;
   }
 
   .hero-right {
     display: none;
   }
 
+  .hero-content {
+    padding: 30px 20px;
+    min-height: 180px;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-credit {
+    font-size: 0.8rem;
+  }
+
+  .hero-categories {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .category-item {
+    padding: 12px 16px;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .articles-section {
+    padding: 0 16px 40px;
+    max-width: 100%;
+  }
+
+  .section-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
   .articles-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+    padding: 14px 24px;
   }
 }
 </style>

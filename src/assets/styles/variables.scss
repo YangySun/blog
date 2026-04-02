@@ -24,10 +24,47 @@ $font-size-xxl: 32px;
 $border-radius: 8px;
 $transition: all 0.3s ease;
 
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1200px;
+
+@mixin mobile {
+  @media (max-width: #{$breakpoint-md - 1}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-md}) and (max-width: #{$breakpoint-lg - 1}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'mobile' {
+    @media (max-width: #{$breakpoint-md - 1}) { @content; }
+  } @else if $breakpoint == 'tablet' {
+    @media (min-width: #{$breakpoint-md}) and (max-width: #{$breakpoint-lg - 1}) { @content; }
+  } @else if $breakpoint == 'desktop' {
+    @media (min-width: #{$breakpoint-lg}) { @content; }
+  }
+}
+
 @mixin page-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
+
+  @include mobile {
+    padding: 20px 16px;
+  }
 }
 
 @mixin page-title {
@@ -35,12 +72,22 @@ $transition: all 0.3s ease;
   margin-bottom: $spacing-xl;
   color: var(--text-primary);
   text-align: center;
+
+  @include mobile {
+    font-size: $font-size-xl;
+    margin-bottom: $spacing-lg;
+  }
 }
 
 @mixin card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: $spacing-lg;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
 }
 
 @mixin tab-btn {
@@ -63,6 +110,11 @@ $transition: all 0.3s ease;
     color: white;
     border-color: var(--accent-color);
   }
+
+  @include mobile {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
 }
 
 @mixin no-results {
@@ -70,4 +122,9 @@ $transition: all 0.3s ease;
   padding: $spacing-xl;
   color: var(--text-secondary);
   font-size: $font-size-lg;
+
+  @include mobile {
+    padding: $spacing-lg;
+    font-size: $font-size-md;
+  }
 }

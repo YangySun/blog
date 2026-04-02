@@ -67,6 +67,9 @@
         >
           ↑
         </button>
+        <button @click="toggleMobileMenu" class="mobile-menu-btn">
+          <span class="hamburger" :class="{ 'is-active': showMobileMenu }"></span>
+        </button>
       </div>
 
       <div class="search-overlay" v-if="showSearch" @click.self="toggleSearch">
@@ -93,6 +96,23 @@
           <p v-else-if="searchQuery && !searching" class="search-empty">未找到相关文章</p>
         </div>
       </div>
+
+      <Transition name="slide">
+        <div v-if="showMobileMenu" class="mobile-nav-overlay" @click.self="toggleMobileMenu">
+          <nav class="mobile-nav">
+            <div class="mobile-nav-header">
+              <span class="mobile-nav-title">菜单</span>
+              <button @click="toggleMobileMenu" class="mobile-nav-close">×</button>
+            </div>
+            <router-link to="/blog/" class="mobile-nav-link" @click="toggleMobileMenu">首页</router-link>
+            <router-link to="/blog/articles" class="mobile-nav-link" @click="toggleMobileMenu">文章列表</router-link>
+            <router-link to="/blog/categories" class="mobile-nav-link" @click="toggleMobileMenu">分类列表</router-link>
+            <router-link to="/blog/tags" class="mobile-nav-link" @click="toggleMobileMenu">标签列表</router-link>
+            <router-link to="/blog/about" class="mobile-nav-link" @click="toggleMobileMenu">关于</router-link>
+            <router-link to="/blog/links" class="mobile-nav-link" @click="toggleMobileMenu">友链</router-link>
+          </nav>
+        </div>
+      </Transition>
     </div>
   </header>
 </template>
@@ -110,6 +130,7 @@ const isScrolled = ref(false)
 const isArticlePage = ref(false)
 const articleTitle = ref('')
 const showBackToTop = ref(false)
+const showMobileMenu = ref(false)
 
 function handleScroll() {
   if (isArticlePage.value) {
@@ -126,6 +147,15 @@ function scrollToTop() {
     top: 0,
     behavior: 'smooth'
   })
+}
+
+function toggleMobileMenu() {
+  showMobileMenu.value = !showMobileMenu.value
+  if (showMobileMenu.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
 }
 
 const showSearch = ref(false)
@@ -205,6 +235,8 @@ watch(() => route.params.id, (newId) => {
 watch(() => route.path, () => {
   handleScroll()
   isSpinning.value = false
+  showMobileMenu.value = false
+  document.body.style.overflow = ''
 })
 
 watch(() => route.params.id, (id) => {
@@ -224,6 +256,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  document.body.style.overflow = ''
 })
 </script>
 
@@ -296,6 +329,17 @@ onUnmounted(() => {
         background-color: rgba(255, 255, 255, 0.3);
       }
     }
+
+    .mobile-menu-btn {
+      .hamburger {
+        background-color: white;
+
+        &::before,
+        &::after {
+          background-color: white;
+        }
+      }
+    }
   }
 
   &--scrolled {
@@ -337,6 +381,10 @@ onUnmounted(() => {
   align-items: center;
   height: 64px;
   padding: 0 40px;
+
+  @include mobile {
+    padding: 0 16px;
+  }
 }
 
 .header-left {
@@ -397,6 +445,11 @@ onUnmounted(() => {
       animation: shuffle 0.2s ease-in-out infinite;
     }
   }
+
+  @include mobile {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 @keyframes spin {
@@ -408,6 +461,150 @@ onUnmounted(() => {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-2px) rotate(-5deg); }
   75% { transform: translateX(2px) rotate(5deg); }
+}
+
+.mobile-menu-btn {
+  display: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  @include mobile {
+    display: flex;
+  }
+}
+
+.hamburger {
+  position: relative;
+  width: 24px;
+  height: 2px;
+  background-color: var(--text-primary);
+  transition: all 0.3s ease;
+  border-radius: 1px;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background-color: var(--text-primary);
+    transition: all 0.3s ease;
+    border-radius: 1px;
+    left: 0;
+  }
+
+  &::before {
+    top: -8px;
+  }
+
+  &::after {
+    top: 8px;
+  }
+
+  &.is-active {
+    background-color: transparent;
+
+    &::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  display: flex;
+}
+
+.mobile-nav {
+  width: 280px;
+  height: 100%;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.mobile-nav-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.mobile-nav-close {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.mobile-nav-link {
+  padding: 16px 20px;
+  font-size: 16px;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--bg-secondary);
+    color: var(--accent-color);
+  }
+
+  &.router-link-active {
+    color: var(--accent-color);
+    background: var(--bg-secondary);
+  }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
 }
 
 .search-overlay {
@@ -433,6 +630,10 @@ onUnmounted(() => {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   margin: 0 20px;
+
+  @include mobile {
+    margin: 0 16px;
+  }
 }
 
 .search-input {
@@ -448,11 +649,20 @@ onUnmounted(() => {
   &::placeholder {
     color: var(--text-secondary);
   }
+
+  @include mobile {
+    padding: 16px;
+    font-size: $font-size-md;
+  }
 }
 
 .search-results {
   max-height: 400px;
   overflow-y: auto;
+
+  @include mobile {
+    max-height: 60vh;
+  }
 }
 
 .search-result-item {
@@ -480,6 +690,13 @@ onUnmounted(() => {
   .result-category {
     font-size: $font-size-sm;
     color: var(--text-secondary);
+  }
+
+  @include mobile {
+    padding: 14px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 }
 
@@ -540,6 +757,10 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 40px;
+
+  @include mobile {
+    display: none;
+  }
 }
 
 .nav-link {
@@ -633,12 +854,6 @@ onUnmounted(() => {
   }
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 .back-to-top-btn {
   width: 36px;
   height: 36px;
@@ -650,15 +865,10 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-@media (max-width: 768px) {
-  .nav {
-    display: none;
-  }
-
-  .header-center {
-    display: none;
+  @include mobile {
+    width: 44px;
+    height: 44px;
   }
 }
 </style>

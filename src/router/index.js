@@ -67,4 +67,14 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
+router.afterEach(() => {
+  const loading = useLoadingStore()
+  loading.finish()
+})
+
+router.onError(() => {
+  const loading = useLoadingStore()
+  loading.fail('加载页面失败...')
+})
+
 export default router
