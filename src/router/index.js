@@ -5,7 +5,8 @@ const routes = [
   {
     path: '/blog/',
     name: 'Home',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/Home.vue'),
+    meta: { manualLoading: true }
   },
   {
     path: '/blog/articles',
@@ -97,9 +98,11 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-router.afterEach(() => {
-  const loading = useLoadingStore()
-  loading.finish()
+router.afterEach((to) => {
+  if (!to.meta.manualLoading) {
+    const loading = useLoadingStore()
+    loading.finish()
+  }
 })
 
 router.onError(() => {
