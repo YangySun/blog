@@ -79,6 +79,11 @@ const routes = [
     path: '/blog/tools/color-converter',
     name: 'ColorConverter',
     component: () => import('../views/tools/ColorConverter.vue')
+  },
+  {
+    path: '/blog/tools/snake-game',
+    name: 'SnakeGame',
+    component: () => import('../views/tools/SnakeGame.vue')
   }
 ]
 

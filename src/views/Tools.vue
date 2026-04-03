@@ -69,6 +69,10 @@ const getIconComponent = (iconName) => {
       h('circle', { cx: '8.5', cy: '7.5', r: '.5' }),
       h('circle', { cx: '6.5', cy: '12.5', r: '.5' }),
       h('path', { d: 'M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.92 0 1.71-.77 1.71-1.71 0-.43-.17-.83-.46-1.13-.29-.29-.46-.69-.46-1.12 0-.94.77-1.71 1.71-1.71H16c3.31 0 6-2.69 6-6 0-5.5-4.5-10-10-10z' })
+    ]),
+    game: h('svg', { xmlns: 'http://www.w3.org/2000/svg', width: '24', height: '24', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [
+      h('rect', { x: '2', y: '7', width: '20', height: '15', rx: '2', ry: '2' }),
+      h('polyline', { points: '17 2 12 7 7 2' })
     ])
   }
   return icons[iconName] || icons.json

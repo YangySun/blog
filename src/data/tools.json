@@ -33,5 +33,12 @@
     "description": "HEX、RGB、HSL 颜色格式之间的互相转换。",
     "icon": "palette",
     "path": "/blog/tools/color-converter"
+  },
+  {
+    "id": "snake-game",
+    "name": "贪吃蛇",
+    "description": "经典贪吃蛇小游戏，休闲一下。",
+    "icon": "game",
+    "path": "/blog/tools/snake-game"
   }
 ]
